@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Expertise IA chez Wavestone</title>
+<meta name="description" content="Cadrer, adopter, construire, sécuriser : Wavestone accompagne toute la chaîne de valeur de l'IA, 14 expertises en quatre étapes.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#360058">
+<meta property="og:title" content="Expertise IA chez Wavestone">
+<meta property="og:description" content="L'IA en confiance, de bout en bout. 14 expertises, du premier arbitrage au déploiement à l'échelle.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23451DC7'/%3E%3Cpath d='M12 20l10 26 10-18 10 18 10-26' fill='none' stroke='%23fff' stroke-width='6' stroke-linejoin='round' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap">
+<style>
+  :root{
+    --violet:#451DC7;
+    --violet-deep:#360058;
+    --violet-ink:#1A1240;
+    --violet-soft:#E9E4FA;
+    --green:#04F06A;
+    --paper:#F6F4FB;
+    --white:#FFFFFF;
+    --muted:#5F5885;
+    --line:rgba(69,29,199,.16);
+    --maxw:1040px;
+    --gutter:clamp(16px,5vw,48px);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--violet-ink);
+    font-family:"Poppins",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    font-weight:400;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+  }
+  h1,h2,h3{margin:0;font-weight:300;letter-spacing:-.015em;text-wrap:balance}
+  p{margin:0}
+  a{color:inherit}
+  :focus-visible{outline:3px solid var(--green);outline-offset:4px;border-radius:4px}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding-left:max(var(--gutter),env(safe-area-inset-left));padding-right:max(var(--gutter),env(safe-area-inset-right))}
+  .logo{display:block;width:clamp(132px,22vw,172px);height:auto;color:currentColor}
+
+  /* ============ HERO ============ */
+  .hero{
+    position:relative;overflow:hidden;
+    color:var(--white);
+    background:var(--violet-deep);
+    background-image:
+      radial-gradient(90% 70% at 18% 20%, #451DC7 0%, rgba(69,29,199,0) 60%),
+      radial-gradient(70% 60% at 95% 100%, rgba(4,240,106,.14) 0%, rgba(4,240,106,0) 55%),
+      radial-gradient(1.2px 1.2px at 12% 32%, rgba(255,255,255,.75) 50%, transparent 51%),
+      radial-gradient(1.4px 1.4px at 78% 18%, rgba(255,255,255,.7) 50%, transparent 51%),
+      radial-gradient(1px 1px at 64% 42%, rgba(255,255,255,.6) 50%, transparent 51%),
+      radial-gradient(1.6px 1.6px at 88% 62%, rgba(255,255,255,.55) 50%, transparent 51%),
+      radial-gradient(1px 1px at 30% 78%, rgba(255,255,255,.5) 50%, transparent 51%),
+      radial-gradient(1.2px 1.2px at 48% 12%, rgba(255,255,255,.65) 50%, transparent 51%),
+      radial-gradient(1px 1px at 6% 88%, rgba(255,255,255,.45) 50%, transparent 51%);
+    padding-top:max(22px,env(safe-area-inset-top));
+    padding-bottom:clamp(40px,7vw,72px);
+  }
+  .topbar{display:flex;flex-direction:column;align-items:flex-start;gap:.9rem;padding:6px 0 clamp(36px,7vw,72px)}
+  .topbar .event{font-size:.85rem;color:rgba(255,255,255,.72);line-height:1.4}
+  @media (min-width:640px){
+    .topbar{flex-direction:row;align-items:center;justify-content:space-between;gap:1rem}
+    .topbar .event{text-align:right;white-space:nowrap}
+  }
+  .hero h1{
+    font-size:clamp(2.35rem,8.2vw,4.4rem);
+    line-height:1.04;
+    max-width:14ch;
+  }
+  .hero .lede{
+    margin-top:1.25rem;
+    font-size:clamp(1rem,2.4vw,1.2rem);
+    line-height:1.55;
+    color:rgba(255,255,255,.82);
+    max-width:46ch;
+  }
+  /* the wave */
+  .wave{display:block;width:100%;height:auto;margin-top:clamp(28px,6vw,56px);overflow:visible}
+  .wave .trail{fill:none;stroke:rgba(255,255,255,.18);stroke-width:2}
+  .wave .path{fill:none;stroke:var(--green);stroke-width:3;stroke-linecap:round;
+    pathLength:1;stroke-dasharray:1;stroke-dashoffset:1;
+    animation:draw 1.5s cubic-bezier(.65,0,.35,1) .25s forwards}
+  .wave .glow{fill:none;stroke:var(--green);stroke-width:12;stroke-linecap:round;opacity:.18;filter:blur(6px);
+    pathLength:1;stroke-dasharray:1;stroke-dashoffset:1;
+    animation:draw 1.5s cubic-bezier(.65,0,.35,1) .25s forwards}
+  .wave .node{transform-box:fill-box;transform-origin:center;transform:scale(0);
+    animation:pop .5s cubic-bezier(.2,1.2,.4,1) forwards}
+  .wave .node:nth-of-type(1){animation-delay:.55s}
+  .wave .node:nth-of-type(2){animation-delay:.9s}
+  .wave .node:nth-of-type(3){animation-delay:1.25s}
+  .wave .node:nth-of-type(4){animation-delay:1.6s}
+  .wave .node circle.ring{fill:var(--violet-deep);stroke:var(--green);stroke-width:3;transition:stroke-width .2s}
+  .wave .node circle.core{fill:var(--white)}
+  .wave .node text{fill:var(--white);font-family:"Poppins",sans-serif;font-size:28px;font-weight:400;text-anchor:middle}
+  .wave .node .hint{fill:rgba(255,255,255,.6);font-size:19px;font-weight:300}
+  .wave a{cursor:pointer}
+  .wave a:hover .ring,.wave a:focus-visible .ring{stroke-width:6}
+  .wave a:focus-visible{outline:none}
+  .wave a:focus-visible .ring{stroke:var(--white)}
+  @keyframes draw{to{stroke-dashoffset:0}}
+  @keyframes pop{to{transform:scale(1)}}
+  @media (prefers-reduced-motion:reduce){
+    .wave .path,.wave .glow{animation:none;stroke-dashoffset:0}
+    .wave .node{animation:none;transform:none}
+  }
+  .scroll-hint{margin-top:clamp(18px,4vw,30px);font-size:.85rem;color:rgba(255,255,255,.6)}
+  @media (min-width:640px){
+    .wave{max-width:900px;margin-left:auto;margin-right:auto}
+    .wave .node text{font-size:20px}
+    .wave .node .hint{font-size:14px}
+  }
+  @media (min-width:1000px){
+    .wave .node text{font-size:17px}
+    .wave .node .hint{font-size:12px}
+    .wave .path{stroke-width:2.5}
+    .wave .node circle.ring{stroke-width:2.5}
+  }
+
+  /* ============ PILLARS ============ */
+  .journey{position:relative;padding:clamp(40px,7vw,80px) 0 clamp(24px,5vw,56px)}
+  .journey::before{
+    content:"";position:absolute;top:0;bottom:0;
+    left:calc(max(var(--gutter),env(safe-area-inset-left)) + 11px);
+    width:2px;background:linear-gradient(var(--violet) , var(--violet) 92%, rgba(69,29,199,0));
+    opacity:.35;
+  }
+  @media (min-width:1136px){
+    .journey::before{left:calc(50% - var(--maxw)/2 + var(--gutter) + 11px)}
+  }
+  .pillar{position:relative;padding-left:44px;padding-bottom:clamp(44px,8vw,96px)}
+  .pillar:last-child{padding-bottom:0}
+  .pillar .mark{
+    position:absolute;left:0;top:.2rem;width:24px;height:24px;border-radius:50%;
+    background:var(--paper);border:2px solid var(--violet);
+    display:grid;place-items:center;
+  }
+  .pillar .mark::after{content:"";width:8px;height:8px;border-radius:50%;background:var(--violet)}
+  .pillar .verb{font-weight:500;color:var(--violet);font-size:1rem}
+  .pillar h2{font-size:clamp(1.75rem,5vw,2.6rem);line-height:1.12;margin-top:.35rem}
+  .pillar .promise{margin-top:.9rem;font-size:clamp(1rem,2.2vw,1.12rem);line-height:1.55;color:var(--muted);max-width:40ch}
+  .exp{margin:1.6rem 0 0;padding:0;list-style:none;border-top:1px solid var(--line)}
+  .exp li{padding:1rem 0 1.05rem;border-bottom:1px solid var(--line)}
+  .exp h3{font-weight:500;font-size:1.05rem;letter-spacing:0;color:var(--violet-ink)}
+  .exp p{margin-top:.25rem;color:var(--muted);font-size:.95rem;line-height:1.55;max-width:60ch}
+  .exp .for{display:block;margin-top:.45rem;font-size:.8rem;color:var(--violet);font-weight:500}
+  .exp .for span{font-weight:300;color:var(--muted)}
+  @media (min-width:820px){
+    .pillar{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);column-gap:clamp(32px,6vw,80px);padding-left:52px}
+    .pillar .head{position:sticky;top:28px;align-self:start}
+    .pillar .mark{left:-52px}
+    .exp{margin-top:.3rem}
+    .exp li{display:grid;grid-template-columns:minmax(0,1fr);}
+  }
+
+  /* ============ CLOSE ============ */
+  .close{
+    color:var(--white);background:var(--violet-deep);
+    background-image:radial-gradient(74% 130% at 27% 60%, #451DC7 0%, #360058 100%);
+    padding:clamp(48px,8vw,88px) 0 max(28px,env(safe-area-inset-bottom));
+    margin-top:clamp(32px,6vw,64px);
+  }
+  .close h2{font-size:clamp(1.9rem,6vw,3rem);line-height:1.1;max-width:16ch}
+  .close p{margin-top:1rem;font-size:clamp(1rem,2.3vw,1.15rem);line-height:1.55;color:rgba(255,255,255,.84);max-width:52ch}
+  .btn{
+    display:inline-flex;align-items:center;gap:.6rem;
+    margin-top:1.6rem;padding:.8rem 1.25rem .8rem 1.35rem;border-radius:999px;
+    background:var(--white);color:var(--violet);text-decoration:none;font-weight:500;font-size:1rem;
+    transition:transform .18s ease,background .18s ease;
+  }
+  .btn svg{width:18px;height:18px;transition:transform .18s ease}
+  .btn:hover{background:var(--violet-soft)}
+  .btn:hover svg{transform:translateX(3px)}
+  .close .sig{margin-top:clamp(40px,7vw,64px);padding-top:1.4rem;border-top:1px solid rgba(255,255,255,.18);
+    display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.8rem 1.6rem}
+  .close .sig .logo{width:120px}
+  .close .sig p{margin:0;font-size:.8rem;color:rgba(255,255,255,.65);max-width:none}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="topbar">
+      <a href="https://www.wavestone.com/fr/" aria-label="Wavestone">
+        <svg class="logo" viewBox="0 0 2147 290" role="img" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M1538.0 288.9C1524.6 287.9 1507.2 283.8 1494.5 278.6C1463.2 265.9 1441.6 242.6 1432.3 211.5C1429.8 203.1 1429.6 201.2 1429.6 183.0C1429.5 165.6 1429.7 162.6 1431.8 155.0C1443.2 113.6 1477.1 85.6 1526.0 77.3C1537.6 75.3 1565.3 75.1 1576.0 76.8C1626.9 85.2 1661.4 113.3 1672.7 155.5C1675.0 164.3 1675.3 167.4 1675.4 182.0C1675.4 200.4 1673.8 209.4 1667.9 223.6C1654.8 255.0 1623.8 278.4 1584.5 286.4C1577.7 287.8 1553.6 290.2 1550.5 289.8C1550.0 289.8 1544.3 289.3 1538.0 288.9ZM1073.0 288.3C1055.4 286.1 1030.5 278.9 1014.7 271.7C1006.2 267.7 990.4 258.5 989.4 256.9C988.7 255.8 999.8 239.0 1001.7 238.3C1002.3 238.1 1005.7 239.7 1009.2 241.9C1047.7 266.2 1100.0 273.7 1128.8 259.1C1139.0 253.9 1144.0 247.3 1144.0 239.0C1144.0 233.1 1141.9 229.0 1136.5 224.2C1128.0 216.7 1118.4 213.0 1083.5 203.5C1042.3 192.4 1024.5 184.2 1012.6 170.9C1001.6 158.6 997.5 141.3 1001.5 124.1C1004.6 110.9 1012.2 100.3 1024.5 92.1C1056.9 70.4 1114.3 69.5 1163.2 90.0L1171.0 93.2L1171.0 106.6C1171.0 114.0 1170.8 120.0 1170.5 120.0C1170.2 120.0 1165.9 118.0 1160.9 115.5C1149.2 109.6 1143.7 107.4 1131.6 103.9C1104.2 95.9 1071.6 96.5 1054.3 105.3C1038.7 113.4 1035.4 127.9 1046.8 138.2C1054.7 145.3 1066.7 150.0 1099.0 158.5C1141.3 169.6 1158.6 177.5 1172.1 191.7C1181.8 201.9 1186.0 212.5 1186.0 227.0C1186.0 243.0 1181.5 253.7 1169.9 265.2C1163.5 271.6 1160.5 273.7 1151.8 277.9C1146.1 280.6 1136.9 284.1 1131.0 285.6C1121.4 288.0 1118.6 288.3 1098.5 288.5C1086.4 288.7 1074.9 288.6 1073.0 288.3ZM109.2 281.8C107.6 278.9 88.8 244.6 67.5 205.5C46.2 166.4 22.3 122.7 14.4 108.3C6.5 93.8 0.0 81.6 0.0 81.0C0.0 80.3 10.0 80.0 29.2 80.0L58.5 80.0L60.6 83.8C61.8 85.8 77.0 113.6 94.5 145.5C112.0 177.4 129.8 209.9 134.1 217.8C138.5 225.6 142.0 232.5 142.0 233.0C142.0 234.0 114.3 285.1 113.1 286.3C112.6 286.8 110.9 284.8 109.2 281.8ZM229.3 275.7C226.0 269.6 211.5 243.1 197.3 217.0C134.0 101.4 123.0 81.1 123.0 80.5C123.0 80.2 136.4 80.1 152.7 80.2L182.4 80.5L192.7 99.5C224.5 157.4 233.8 174.5 238.8 183.4L244.3 193.3L247.3 187.4C276.7 128.7 316.4 73.2 372.1 13.0L383.6 0.5L402.4 0.2L421.2 -0.0L404.3 17.7C376.4 47.2 357.3 69.8 335.5 99.0C295.6 152.6 261.6 215.7 240.5 275.0C238.5 280.8 236.5 285.8 236.1 286.2C235.7 286.6 232.7 281.9 229.3 275.7ZM621.8 286.3C614.2 272.7 510.9 83.0 510.4 81.8C509.8 80.1 511.4 80.0 535.8 80.0C555.4 80.0 562.0 80.3 562.7 81.3C563.3 81.9 574.2 101.6 587.0 125.0C599.8 148.4 615.3 176.7 621.5 187.9C627.6 199.0 633.0 208.3 633.5 208.4C634.4 208.5 635.2 207.0 664.4 152.5C675.4 132.2 688.6 107.5 693.8 97.8L703.4 80.0L719.7 80.0L736.1 80.0L734.6 82.7C733.8 84.3 724.1 102.2 713.0 122.5C701.9 142.8 677.5 187.6 658.8 222.0C640.1 256.4 624.2 285.1 623.5 285.8C622.8 286.6 622.0 286.8 621.8 286.3ZM1885.3 262.3C1867.8 248.7 1839.5 226.8 1822.5 213.6C1805.5 200.4 1782.3 182.4 1771.0 173.7L1750.5 157.8L1750.2 220.9L1750.0 284.0L1736.0 284.0L1722.0 284.0L1722.0 180.4C1722.0 97.6 1722.3 77.0 1723.2 77.7C1755.1 102.6 1889.0 206.0 1889.5 206.0C1889.8 206.0 1890.0 177.7 1890.0 143.0L1890.0 80.0L1904.0 80.0L1918.0 80.0L1918.0 183.5C1918.0 240.4 1917.8 287.0 1917.6 287.0C1917.4 287.0 1902.8 275.9 1885.3 262.3ZM318.5 277.2C330.5 255.6 418.2 95.0 422.2 87.3C424.9 82.2 427.5 77.8 427.9 77.6C428.5 77.2 541.0 282.0 541.0 283.5C541.0 283.8 529.2 284.0 514.7 284.0L488.5 284.0L478.5 265.8L468.4 247.5L417.9 247.2L367.4 247.0L357.6 265.5L347.8 284.0L331.3 284.0L314.8 284.0L318.5 277.2ZM775.0 182.0L775.0 80.0L860.4 80.0C927.8 80.0 945.9 80.3 946.2 81.2C946.5 81.9 946.5 88.2 946.2 95.2L945.8 108.0L884.1 108.2L822.5 108.5L822.2 138.2L822.0 168.0L879.5 168.0L937.0 168.0L937.0 182.0L937.0 196.0L879.5 196.0L822.0 196.0L822.0 226.0L822.0 256.0L885.0 256.0L948.0 256.0L948.0 270.0L948.0 284.0L861.5 284.0L775.0 284.0L775.0 182.0ZM1290.0 196.0L1290.0 108.0L1252.5 108.0L1215.0 108.0L1215.0 95.6C1215.0 88.8 1215.3 82.5 1215.6 81.6C1216.2 80.2 1225.8 80.0 1314.1 80.0L1412.1 80.0L1411.8 94.0L1411.5 108.1L1374.2 108.0L1337.0 108.0L1337.0 196.0L1337.0 284.0L1313.5 284.0L1290.0 284.0L1290.0 196.0ZM1973.0 182.0L1973.0 80.0L2059.0 80.0L2145.1 80.0L2144.8 94.0L2144.5 108.0L2082.5 108.3L2020.5 108.5L2020.2 138.2L2020.0 168.0L2078.0 168.0L2136.0 168.0L2136.0 182.0L2136.0 196.0L2078.0 196.0L2020.0 196.0L2020.2 225.8L2020.5 255.5L2083.8 255.8L2147.1 256.0L2146.8 269.8L2146.5 283.5L2059.8 283.8L1973.0 284.0L1973.0 182.0ZM1574.4 264.0C1586.1 261.0 1595.3 255.7 1604.2 246.9C1610.6 240.5 1612.6 237.6 1616.8 228.9C1623.0 216.0 1626.0 203.8 1626.7 187.6C1628.2 153.0 1615.7 123.1 1593.7 109.2C1576.6 98.4 1551.9 95.2 1529.7 100.9C1503.9 107.6 1486.1 128.2 1479.8 159.0C1477.1 172.2 1477.7 199.5 1480.9 211.5C1489.4 242.7 1509.3 261.2 1539.5 266.0C1548.0 267.3 1565.4 266.3 1574.4 264.0ZM452.0 218.3C452.0 216.5 417.5 155.1 416.9 155.7C416.0 156.7 385.1 214.0 383.2 218.2C383.0 218.7 398.4 219.0 417.4 219.0C436.4 219.0 452.0 218.7 452.0 218.3Z"/></svg>
+      </a>
+      <p class="event">Table ronde INSEAD × Wavestone<br>3 novembre 2026, La Défense</p>
+    </div>
+
+    <h1>L'IA en confiance, de bout en bout.</h1>
+    <p class="lede">Cadrer, adopter, construire, sécuriser : Wavestone accompagne toute la chaîne de valeur de l'IA, du premier arbitrage au déploiement à l'échelle. Quatorze expertises, quatre étapes.</p>
+
+    <svg class="wave" viewBox="0 -14 720 226" aria-label="Les quatre étapes de l'accompagnement : cadrer, adopter, construire, sécuriser">
+      <path class="trail" d="M-40 120 C 20 120, 20 120, 60 120"/>
+      <path class="trail" d="M660 70 C 700 70, 720 70, 780 70"/>
+      <path class="glow" d="M60 120 C 160 120, 160 60, 260 60 C 360 60, 360 130, 460 130 C 560 130, 560 70, 660 70"/>
+      <path class="path" d="M60 120 C 160 120, 160 60, 260 60 C 360 60, 360 130, 460 130 C 560 130, 560 70, 660 70"/>
+
+      <a class="node" href="#cadrer"><circle class="ring" cx="60" cy="120" r="13"/><circle class="core" cx="60" cy="120" r="4.5"/><text x="60" y="170">Cadrer</text><text class="hint" x="60" y="196">stratégie</text></a>
+      <a class="node" href="#adopter"><circle class="ring" cx="260" cy="60" r="13"/><circle class="core" cx="260" cy="60" r="4.5"/><text class="hint" x="260" y="4">métiers</text><text x="260" y="34">Adopter</text></a>
+      <a class="node" href="#construire"><circle class="ring" cx="460" cy="130" r="13"/><circle class="core" cx="460" cy="130" r="4.5"/><text x="460" y="180">Construire</text><text class="hint" x="460" y="206">plateformes et data</text></a>
+      <a class="node" href="#securiser"><circle class="ring" cx="660" cy="70" r="13"/><circle class="core" cx="660" cy="70" r="4.5"/><text class="hint" x="660" y="14">gouvernance</text><text x="660" y="44">Sécuriser</text></a>
+    </svg>
+    <p class="scroll-hint">Touchez une étape pour y aller directement.</p>
+  </div>
+</header>
+
+<main class="journey">
+  <div class="wrap">
+
+    <section class="pillar" id="cadrer">
+      <div class="head">
+        <span class="mark" aria-hidden="true"></span>
+        <span class="verb">Cadrer</span>
+        <h2>Stratégie &amp; cadrage</h2>
+        <p class="promise">Décider où l'IA crée de la valeur, et le prouver au COMEX avec des chiffres que la finance accepte.</p>
+      </div>
+      <ul class="exp">
+        <li><h3>AI Strategy &amp; Trajectory</h3><p>Vision, feuille de route et portefeuille de cas d'usage priorisés, portés au COMEX.</p><span class="for">Pour <span>CEO, BU Lead, CDO</span></span></li>
+        <li><h3>Business Transformation</h3><p>Réinventer les processus cœur de métier : méthode APR, Self-AI, product ownership.</p><span class="for">Pour <span>CEO, BU Lead, CDO</span></span></li>
+        <li><h3>AI FinOps &amp; Cost Control</h3><p>Matrice de coûts et pilotage de la valeur réelle de l'IA, usage par usage.</p><span class="for">Pour <span>CEO, BU Lead, CDO</span></span></li>
+      </ul>
+    </section>
+
+    <section class="pillar" id="adopter">
+      <div class="head">
+        <span class="mark" aria-hidden="true"></span>
+        <span class="verb">Adopter</span>
+        <h2>Adoption &amp; transformation métier</h2>
+        <p class="promise">Mettre l'IA dans les mains de chaque métier, de la bureautique du quotidien aux agents qui font le travail.</p>
+      </div>
+      <ul class="exp">
+        <li><h3>AI for All / Self-AI</h3><p>Déployer l'IA à l'échelle, de la bureautique aux usages métiers, avec des champions dans chaque équipe.</p><span class="for">Pour <span>BU Lead, CDO</span></span></li>
+        <li><h3>Fonctions corporate agentiques</h3><p>Agents pour la finance, les achats et les fonctions support.</p><span class="for">Pour <span>CFO, CPO, CDO</span></span></li>
+        <li><h3>Customer, Sales &amp; Marketing agentiques</h3><p>Agents au service de la relation client et des services clients.</p><span class="for">Pour <span>CMO, CCO, CDO</span></span></li>
+        <li><h3>Awareness &amp; upskilling</h3><p>Sensibilisation, événements VIP, séminaires et montée en compétences des équipes.</p><span class="for">Pour <span>CEO, CIO, BU Lead</span></span></li>
+      </ul>
+    </section>
+
+    <section class="pillar" id="construire">
+      <div class="head">
+        <span class="mark" aria-hidden="true"></span>
+        <span class="verb">Construire</span>
+        <h2>Build, plateformes &amp; data</h2>
+        <p class="promise">Construire des agents fiables sur un socle de données prêt pour l'IA, intégré au système d'information.</p>
+      </div>
+      <ul class="exp">
+        <li><h3>AI &amp; Agentic Engineering</h3><p>AI factory, développement de cas d'usage, AIOps.</p><span class="for">Pour <span>AI Factory Lead, CDO</span></span></li>
+        <li><h3>Agentic platforms &amp; architecture</h3><p>Architecture agentique et intégration au système d'information existant.</p><span class="for">Pour <span>Architecture Lead, CDO</span></span></li>
+        <li><h3>Semantic Layer</h3><p>Actifs sémantiques et architecture de données partagés par les agents et les métiers.</p><span class="for">Pour <span>Architecture Lead, CDO</span></span></li>
+        <li><h3>Knowledge &amp; unstructured data</h3><p>Rendre la connaissance et les données non structurées exploitables par l'IA.</p><span class="for">Pour <span>BU owner, CDO</span></span></li>
+        <li><h3>Harness Engineering</h3><p>Industrialiser et fiabiliser les chaînes agentiques en production.</p><span class="for">Pour <span>Architecture Lead, CDO</span></span></li>
+      </ul>
+    </section>
+
+    <section class="pillar" id="securiser">
+      <div class="head">
+        <span class="mark" aria-hidden="true"></span>
+        <span class="verb">Sécuriser</span>
+        <h2>Confiance, gouvernance &amp; sécurité</h2>
+        <p class="promise">Déployer à l'échelle sans perdre la maîtrise : conformité, sécurité des agents, IA responsable.</p>
+      </div>
+      <ul class="exp">
+        <li><h3>AI Governance, risques &amp; AI Act</h3><p>Gouvernance, modèle opérationnel cible, conformité AI Act et IA responsable.</p><span class="for">Pour <span>BU Lead, CDO, CDAIO</span></span></li>
+        <li><h3>Agent &amp; AI Security</h3><p>Identité, sécurité et maîtrise du cycle de vie des agents.</p><span class="for">Pour <span>Architecture Lead, CDO</span></span></li>
+      </ul>
+    </section>
+
+  </div>
+</main>
+
+<footer class="close">
+  <div class="wrap">
+    <h2>Poursuivons la conversation ce matin.</h2>
+    <p>L'équipe Wavestone est dans la salle. Venez nous parler d'un cas d'usage, d'un arbitrage budgétaire ou d'une question de gouvernance : c'est le meilleur moyen de voir ce que nous ferions chez vous.</p>
+    <a class="btn" href="https://www.wavestone.com/fr/">Découvrir Wavestone
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+    <div class="sig">
+      <svg class="logo" viewBox="0 0 2147 290" role="img" aria-label="Wavestone"><path fill="currentColor" fill-rule="evenodd" d="M1538.0 288.9C1524.6 287.9 1507.2 283.8 1494.5 278.6C1463.2 265.9 1441.6 242.6 1432.3 211.5C1429.8 203.1 1429.6 201.2 1429.6 183.0C1429.5 165.6 1429.7 162.6 1431.8 155.0C1443.2 113.6 1477.1 85.6 1526.0 77.3C1537.6 75.3 1565.3 75.1 1576.0 76.8C1626.9 85.2 1661.4 113.3 1672.7 155.5C1675.0 164.3 1675.3 167.4 1675.4 182.0C1675.4 200.4 1673.8 209.4 1667.9 223.6C1654.8 255.0 1623.8 278.4 1584.5 286.4C1577.7 287.8 1553.6 290.2 1550.5 289.8C1550.0 289.8 1544.3 289.3 1538.0 288.9ZM1073.0 288.3C1055.4 286.1 1030.5 278.9 1014.7 271.7C1006.2 267.7 990.4 258.5 989.4 256.9C988.7 255.8 999.8 239.0 1001.7 238.3C1002.3 238.1 1005.7 239.7 1009.2 241.9C1047.7 266.2 1100.0 273.7 1128.8 259.1C1139.0 253.9 1144.0 247.3 1144.0 239.0C1144.0 233.1 1141.9 229.0 1136.5 224.2C1128.0 216.7 1118.4 213.0 1083.5 203.5C1042.3 192.4 1024.5 184.2 1012.6 170.9C1001.6 158.6 997.5 141.3 1001.5 124.1C1004.6 110.9 1012.2 100.3 1024.5 92.1C1056.9 70.4 1114.3 69.5 1163.2 90.0L1171.0 93.2L1171.0 106.6C1171.0 114.0 1170.8 120.0 1170.5 120.0C1170.2 120.0 1165.9 118.0 1160.9 115.5C1149.2 109.6 1143.7 107.4 1131.6 103.9C1104.2 95.9 1071.6 96.5 1054.3 105.3C1038.7 113.4 1035.4 127.9 1046.8 138.2C1054.7 145.3 1066.7 150.0 1099.0 158.5C1141.3 169.6 1158.6 177.5 1172.1 191.7C1181.8 201.9 1186.0 212.5 1186.0 227.0C1186.0 243.0 1181.5 253.7 1169.9 265.2C1163.5 271.6 1160.5 273.7 1151.8 277.9C1146.1 280.6 1136.9 284.1 1131.0 285.6C1121.4 288.0 1118.6 288.3 1098.5 288.5C1086.4 288.7 1074.9 288.6 1073.0 288.3ZM109.2 281.8C107.6 278.9 88.8 244.6 67.5 205.5C46.2 166.4 22.3 122.7 14.4 108.3C6.5 93.8 0.0 81.6 0.0 81.0C0.0 80.3 10.0 80.0 29.2 80.0L58.5 80.0L60.6 83.8C61.8 85.8 77.0 113.6 94.5 145.5C112.0 177.4 129.8 209.9 134.1 217.8C138.5 225.6 142.0 232.5 142.0 233.0C142.0 234.0 114.3 285.1 113.1 286.3C112.6 286.8 110.9 284.8 109.2 281.8ZM229.3 275.7C226.0 269.6 211.5 243.1 197.3 217.0C134.0 101.4 123.0 81.1 123.0 80.5C123.0 80.2 136.4 80.1 152.7 80.2L182.4 80.5L192.7 99.5C224.5 157.4 233.8 174.5 238.8 183.4L244.3 193.3L247.3 187.4C276.7 128.7 316.4 73.2 372.1 13.0L383.6 0.5L402.4 0.2L421.2 -0.0L404.3 17.7C376.4 47.2 357.3 69.8 335.5 99.0C295.6 152.6 261.6 215.7 240.5 275.0C238.5 280.8 236.5 285.8 236.1 286.2C235.7 286.6 232.7 281.9 229.3 275.7ZM621.8 286.3C614.2 272.7 510.9 83.0 510.4 81.8C509.8 80.1 511.4 80.0 535.8 80.0C555.4 80.0 562.0 80.3 562.7 81.3C563.3 81.9 574.2 101.6 587.0 125.0C599.8 148.4 615.3 176.7 621.5 187.9C627.6 199.0 633.0 208.3 633.5 208.4C634.4 208.5 635.2 207.0 664.4 152.5C675.4 132.2 688.6 107.5 693.8 97.8L703.4 80.0L719.7 80.0L736.1 80.0L734.6 82.7C733.8 84.3 724.1 102.2 713.0 122.5C701.9 142.8 677.5 187.6 658.8 222.0C640.1 256.4 624.2 285.1 623.5 285.8C622.8 286.6 622.0 286.8 621.8 286.3ZM1885.3 262.3C1867.8 248.7 1839.5 226.8 1822.5 213.6C1805.5 200.4 1782.3 182.4 1771.0 173.7L1750.5 157.8L1750.2 220.9L1750.0 284.0L1736.0 284.0L1722.0 284.0L1722.0 180.4C1722.0 97.6 1722.3 77.0 1723.2 77.7C1755.1 102.6 1889.0 206.0 1889.5 206.0C1889.8 206.0 1890.0 177.7 1890.0 143.0L1890.0 80.0L1904.0 80.0L1918.0 80.0L1918.0 183.5C1918.0 240.4 1917.8 287.0 1917.6 287.0C1917.4 287.0 1902.8 275.9 1885.3 262.3ZM318.5 277.2C330.5 255.6 418.2 95.0 422.2 87.3C424.9 82.2 427.5 77.8 427.9 77.6C428.5 77.2 541.0 282.0 541.0 283.5C541.0 283.8 529.2 284.0 514.7 284.0L488.5 284.0L478.5 265.8L468.4 247.5L417.9 247.2L367.4 247.0L357.6 265.5L347.8 284.0L331.3 284.0L314.8 284.0L318.5 277.2ZM775.0 182.0L775.0 80.0L860.4 80.0C927.8 80.0 945.9 80.3 946.2 81.2C946.5 81.9 946.5 88.2 946.2 95.2L945.8 108.0L884.1 108.2L822.5 108.5L822.2 138.2L822.0 168.0L879.5 168.0L937.0 168.0L937.0 182.0L937.0 196.0L879.5 196.0L822.0 196.0L822.0 226.0L822.0 256.0L885.0 256.0L948.0 256.0L948.0 270.0L948.0 284.0L861.5 284.0L775.0 284.0L775.0 182.0ZM1290.0 196.0L1290.0 108.0L1252.5 108.0L1215.0 108.0L1215.0 95.6C1215.0 88.8 1215.3 82.5 1215.6 81.6C1216.2 80.2 1225.8 80.0 1314.1 80.0L1412.1 80.0L1411.8 94.0L1411.5 108.1L1374.2 108.0L1337.0 108.0L1337.0 196.0L1337.0 284.0L1313.5 284.0L1290.0 284.0L1290.0 196.0ZM1973.0 182.0L1973.0 80.0L2059.0 80.0L2145.1 80.0L2144.8 94.0L2144.5 108.0L2082.5 108.3L2020.5 108.5L2020.2 138.2L2020.0 168.0L2078.0 168.0L2136.0 168.0L2136.0 182.0L2136.0 196.0L2078.0 196.0L2020.0 196.0L2020.2 225.8L2020.5 255.5L2083.8 255.8L2147.1 256.0L2146.8 269.8L2146.5 283.5L2059.8 283.8L1973.0 284.0L1973.0 182.0ZM1574.4 264.0C1586.1 261.0 1595.3 255.7 1604.2 246.9C1610.6 240.5 1612.6 237.6 1616.8 228.9C1623.0 216.0 1626.0 203.8 1626.7 187.6C1628.2 153.0 1615.7 123.1 1593.7 109.2C1576.6 98.4 1551.9 95.2 1529.7 100.9C1503.9 107.6 1486.1 128.2 1479.8 159.0C1477.1 172.2 1477.7 199.5 1480.9 211.5C1489.4 242.7 1509.3 261.2 1539.5 266.0C1548.0 267.3 1565.4 266.3 1574.4 264.0ZM452.0 218.3C452.0 216.5 417.5 155.1 416.9 155.7C416.0 156.7 385.1 214.0 383.2 218.2C383.0 218.7 398.4 219.0 417.4 219.0C436.4 219.0 452.0 218.7 452.0 218.3Z"/></svg>
+      <p>BU AI × Cyber, avec AI Builders. Table ronde INSEAD AI &amp; Digital Transformation Club × Wavestone, 3 novembre 2026, Paris La Défense.</p>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
