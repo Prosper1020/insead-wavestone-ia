@@ -1,4 +1,7 @@
 {
   "cleanUrls": true,
+  "redirects": [
+    { "source": "/", "has": [{ "type": "host", "value": "safran-wavestone.vercel.app" }], "destination": "/demos", "permanent": false }
+  ],
   "headers": [{ "source": "/demos/(.*)", "headers": [{ "key": "X-Robots-Tag", "value": "noindex" }] }]
 }
