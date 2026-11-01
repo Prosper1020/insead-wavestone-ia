@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Le 8D en dix minutes</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+</head>
+<body>
+<style>
+  /* Layout: inputs on the left (the NC sheet and the test report, 5/12), the generated 8D on the right (7/12).
+     Each fact carries its source tag; gaps are tagged orange (hypothesis) or red (to complete). */
+  :root{
+    --bg:#F6F4FB; --surface:#FFFFFF; --fg:#1A1240; --muted:#5F5885; --line:rgba(69,29,199,.16);
+    --accent:#451DC7; --accent-deep:#250F6B; --signal:#04F06A; --signal-ink:#027A38; --soft:#ECE8FA;
+    --high:#D64545; --mid:#D98E04; --low:#0E9F6E; --own:#451DC7;
+    --font-ui:"Poppins",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    --font-data:"IBM Plex Mono",ui-monospace,"Cascadia Mono",Consolas,monospace;
+  }
+  @media (prefers-color-scheme:dark){ :root:not([data-theme="light"]){
+    --bg:#140C2E; --surface:#1E1540; --fg:#F1EEFA; --muted:#B5ACD6; --line:rgba(255,255,255,.14);
+    --accent:#9D86F5; --accent-deep:#C9BDF7; --signal:#04F06A; --signal-ink:#5BF59A; --soft:#2A2054;
+    --high:#FF6B6B; --mid:#F2B134; --low:#3DD598; --own:#9D86F5; color-scheme:dark } }
+  :root[data-theme="dark"]{
+    --bg:#140C2E; --surface:#1E1540; --fg:#F1EEFA; --muted:#B5ACD6; --line:rgba(255,255,255,.14);
+    --accent:#9D86F5; --accent-deep:#C9BDF7; --signal:#04F06A; --signal-ink:#5BF59A; --soft:#2A2054;
+    --high:#FF6B6B; --mid:#F2B134; --low:#3DD598; --own:#9D86F5; color-scheme:dark }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--font-ui);font-size:15px;line-height:1.5;
+       padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 40px}
+  h1,h2,h3{margin:0;font-weight:500;letter-spacing:-.01em;text-wrap:balance}
+  p{margin:0}
+  .wrap{max-width:1180px;margin:0 auto}
+  header{padding:28px 0 16px;display:grid;gap:8px}
+  .eyebrow{font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:500}
+  h1{font-size:clamp(1.7rem,4vw,2.4rem);line-height:1.1;font-weight:300}
+  h1 b{font-weight:600;color:var(--accent)}
+  .lede{color:var(--muted);max-width:70ch}
+  .layout{margin-top:6px;display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:14px;align-items:start}
+  @media (max-width:900px){.layout{grid-template-columns:minmax(0,1fr)}}
+  .col{display:grid;gap:14px;min-width:0;align-content:start}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px;display:grid;gap:8px;min-width:0;align-content:start}
+  .card h3{font-size:.95rem}
+  /* ---- inputs ---- */
+  details.card{display:block}
+  details summary{cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;gap:10px;font-weight:500;font-size:.95rem}
+  details summary::-webkit-details-marker{display:none}
+  details summary::after{content:"+";font-size:1.1rem;color:var(--muted);flex:0 0 auto}
+  details[open] summary::after{content:"\2212"}
+  details summary:focus-visible{outline:3px solid var(--signal);outline-offset:3px;border-radius:4px}
+  .kind{display:inline-block;font-size:.7rem;letter-spacing:.05em;text-transform:uppercase;border-radius:6px;padding:2px 8px;background:var(--soft);color:var(--fg);font-weight:500;margin-right:8px}
+  .lines{list-style:none;margin:10px 0 0;padding:0;display:grid;gap:6px;font-size:.87rem}
+  .lines b{font-weight:600}
+  .lines .k{font-family:var(--font-data);font-size:.8rem;color:var(--accent);font-weight:500;margin-right:4px}
+  .btns{display:flex;flex-wrap:wrap;gap:8px}
+  .btn{font:inherit;font-weight:500;font-size:.92rem;border-radius:999px;padding:9px 18px;cursor:pointer;border:1px solid #250F6B;background:#250F6B;color:#fff}
+  .btn.sec{background:var(--surface);color:var(--fg);border-color:var(--line)}
+  .btn:disabled{opacity:.55;cursor:default}
+  .btn:focus-visible{outline:3px solid var(--signal);outline-offset:3px}
+  /* ---- output ---- */
+  .out-top{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px}
+  .counter{font-size:.85rem;font-weight:500}
+  .counter.idle{color:var(--muted);font-weight:400}
+  .copied{font-size:.78rem;color:var(--muted)}
+  .placeholder{color:var(--muted);font-size:.92rem;border:1px dashed var(--line);border-radius:10px;padding:28px 18px;text-align:center}
+  .out{display:grid;gap:12px}
+  .sec8{border:1px solid var(--line);border-radius:10px;padding:12px 14px;display:grid;gap:8px;background:var(--surface);min-width:0}
+  .sec8.fade{animation:fade .5s ease-out both}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .sec8 h2{font-size:1rem;display:flex;align-items:baseline;gap:10px}
+  .sec8 h2 .d{font-family:var(--font-data);font-size:.85rem;color:#fff;background:var(--accent);border-radius:6px;padding:1px 7px;font-weight:500}
+  .sec8 h4{margin:4px 0 0;font-size:.78rem;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:500}
+  table{border-collapse:collapse;width:100%;font-size:.86rem}
+  th,td{text-align:left;vertical-align:top;padding:7px 6px;border-bottom:1px solid var(--line);overflow-wrap:break-word}
+  th{font-weight:500;color:var(--muted);font-size:.72rem;text-transform:uppercase;letter-spacing:.05em}
+  tr:last-child td{border-bottom:0}
+  .tbl{overflow-x:auto}
+  .tag{display:inline-block;font-size:.7rem;line-height:1.4;border-radius:6px;padding:1px 7px;margin:1px 4px 1px 0;font-weight:500;white-space:nowrap;border:1px solid}
+  .tag.s{color:var(--muted);border-color:var(--line);background:var(--bg);font-family:var(--font-data);font-weight:400}
+  .tag.h{color:#fff;background:#D98E04;border-color:#D98E04}
+  .tag.c{color:#fff;background:#D64545;border-color:#D64545}
+  .legend{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:.78rem;color:var(--muted);align-items:center}
+  /* ---- footer ---- */
+  .foot{margin-top:18px;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+  .foot .card p{font-size:.88rem;color:var(--muted)}
+  .foot .card strong{color:var(--fg)}
+  .src{margin-top:16px;font-size:.78rem;color:var(--muted)}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<div class="wrap">
+<header>
+  <div class="eyebrow">Prototype Wavestone, cas de non-conformité fictif, aucune donnée Safran</div>
+  <h1>Le 8D en dix minutes : <b>pré-rempli, sourcé, avec ses trous visibles</b></h1>
+  <p class="lede">L'ingénieur fournit la fiche de non-conformité et le rapport d'essai. L'agent remplit les huit disciplines à partir des documents, cite les sections, propose un Ishikawa, un 5 pourquoi et trois causes candidates, et laisse en évidence ce qu'il n'a pas pu établir.</p>
+</header>
+
+<div class="layout">
+  <div class="col">
+    <details class="card" open>
+      <summary><span><span class="kind">Entrée 1</span>Fiche NC-2026-0417</span></summary>
+      <ul class="lines">
+        <li><b>Produit :</b> roulement à rouleaux de palier n° 3, référence RB-3-220, lot 24-118.</li>
+        <li><b>Essai :</b> campagne d'endurance EN-24-07, banc B2, 2 000 tr/min, charge radiale 26 kN, 300 h prévues.</li>
+        <li><b>Détection :</b> 14 octobre 2026, 11:40, alarme température palier (opérateur banc).</li>
+        <li><b>Constat :</b> température bague externe 148 °C contre 95 °C en régime établi, montée en 35 minutes ; arrêt du banc à 212 h.</li>
+        <li><b>Gravité :</b> majeure, fin d'essai prématurée, roulement n° 4 potentiellement endommagé.</li>
+        <li><b>Au démontage :</b> écaillage localisé de 18 mm sur la piste externe côté chargé ; rouleaux sans marquage ; cage intacte ; particules métalliques dans l'huile (ISO 4406 18/16/13 contre 15/13/10 à 150 h).</li>
+      </ul>
+    </details>
+    <details class="card" open>
+      <summary><span><span class="kind">Entrée 2</span>Rapport d'essai EN-24-07, rév. A (extraits)</span></summary>
+      <ul class="lines">
+        <li><span class="k">4.1</span><b>Conditions :</b> 2 000 tr/min, 26 kN, huile MIL-PRF-23699 à 70 °C, débit 1,2 l/min par palier ; montage à chaud le 2 octobre, jeu radial 42 µm (spécification 35 à 55 µm).</li>
+        <li><span class="k">4.2</span><b>Vibrations :</b> RMS stable à 0,077 g jusqu'à 150 h ; dérive dès 158 h (0,09 g à 180 h, 0,11 g à 200 h) ; spectre d'enveloppe à 205 h : pic à 236 Hz et harmoniques (BPFO calculée 236,4 Hz). Alarme vibratoire non configurée sur ce canal.</li>
+        <li><span class="k">4.3</span><b>Lubrification :</b> débit nominal ; prélèvement de 150 h conforme ; filtre 10 µm non remplacé depuis la campagne EN-24-05 (arrêt pour usure de cage) ; pas de contrôle de propreté documenté entre les deux campagnes.</li>
+        <li><span class="k">4.4</span><b>Expertise :</b> écaillage de fatigue de contact, 18 mm, profondeur 0,3 mm ; indentations de 20 à 60 µm en amont ; dureté conforme 61 HRC ; pas de défaut de montage visible.</li>
+        <li><span class="k">5</span><b>Actions immédiates :</b> banc consigné ; roulement n° 4 en quarantaine ; analyse du lubrifiant demandée (5 jours).</li>
+      </ul>
+    </details>
+    <div class="btns">
+      <button class="btn" id="gen" type="button">Générer le 8D</button>
+      <button class="btn sec" id="reset" type="button">Réinitialiser</button>
+    </div>
+  </div>
+
+  <section class="card" aria-label="8D généré">
+    <div class="out-top">
+      <span class="counter idle" id="counter" aria-live="polite">Brouillon 8D, gabarit qualité</span>
+      <button class="btn sec" id="copy" type="button" disabled>Copier le texte</button>
+    </div>
+    <div class="legend"><span class="tag s">source</span>fait tiré d'un document <span class="tag h">hypothèse à confirmer</span><span class="tag c">à compléter</span></div>
+    <span class="copied" id="copied" aria-live="polite"></span>
+    <div class="out" id="out"><p class="placeholder">Le 8D apparaît ici, discipline par discipline.</p></div>
+  </section>
+</div>
+
+<div class="foot">
+  <div class="card"><h3>Ce que fait l'agent</h3><p>Copilot, dans Word ou en agent Copilot Studio, lit la fiche NC et le rapport d'essai, remplit les disciplines D1 à D8 selon le gabarit qualité, et <strong>marque chaque fait de sa source</strong>. Il ne tranche pas : il propose des causes classées et le test qui permettrait de choisir.</p></div>
+  <div class="card"><h3>Ce qu'un ingénieur y gagne</h3><p>Deux heures de mise en forme le vendredi soir ramenées à <strong>dix minutes de relecture</strong> ; un 8D homogène d'une équipe à l'autre ; les trous visibles dès le premier brouillon plutôt qu'en revue.</p></div>
+  <div class="card"><h3>Comment on le branche chez vous</h3><p>Natif Microsoft 365, sur les <strong>20 000 licences Copilot</strong> déjà déployées : aucun connecteur en phase 1, les documents restent dans le tenant Safran. <strong>Phase 2</strong> : lien avec le QMS pour l'historique des non-conformités.</p></div>
+</div>
+<p class="src">Cas fictif construit pour la démonstration ; le contenu généré est scripté. Dans la version connectée, Copilot produit le 8D à partir des documents de l'équipe. Wavestone, novembre 2026.</p>
+</div>
+
+<script>
+/* Cell markers: [[s:x]] source tag, [[h]] hypothesis to confirm, [[c]] to complete. */
+const D = [
+ {d:'D1', t:'Équipe', tables:[{head:['Rôle','Titulaire','Source'], rows:[
+   ['Pilote 8D','Ingénieur BE roulements','[[s:fiche NC]]'],
+   ['Essais','Responsable banc B2 et opérateur','[[s:fiche NC]]'],
+   ['Qualité','[[c]]',''],
+   ['Laboratoire','Analyste lubrifiant, résultats sous 5 jours','[[s:rapport 5]]'],
+   ['Expert référent','Roulements et lubrification, à nommer','']]}]},
+ {d:'D2', t:'Description', tables:[{head:['Question','Réponse','Source'], rows:[
+   ['Quoi','Échauffement de la bague externe du roulement n° 3, 95 °C puis 148 °C en 35 minutes, écaillage de 18 mm au démontage','[[s:fiche NC]][[s:rapport 4.4]]'],
+   ['Où','Banc B2, palier n° 3, secteur chargé de la piste externe','[[s:rapport 4.4]]'],
+   ['Quand','14 octobre 2026 à 212 h sur 300 h, dérive vibratoire dès 158 h','[[s:fiche NC]][[s:rapport 4.2]]'],
+   ['Combien','Une éprouvette hors service, une en quarantaine, 88 h perdues','[[s:fiche NC]]'],
+   ['Détecté par','Alarme température 130 °C ; alarme vibratoire non configurée','[[s:rapport 4.2]]']]}]},
+ {d:'D3', t:'Confinement', tables:[{head:['Action','Source ou statut'], rows:[
+   ['Consignation du banc','[[s:rapport 5]]'],
+   ['Quarantaine du roulement n° 4','[[s:rapport 5]]'],
+   ['Analyse du lubrifiant demandée','[[s:rapport 5]]'],
+   ['Vérification des autres bancs partageant le circuit (circuit partagé ?)','[[h]]']]}]},
+ {d:'D4', t:'Causes racines', tables:[
+   {cap:'Ishikawa', head:['Famille','Constat','Source'], rows:[
+     ['Matière','Dureté conforme, indentations de 20 à 60 µm en amont de l\'écaillage','[[s:rapport 4.4]]'],
+     ['Méthode','Pas de contrôle de propreté entre campagnes, alarme vibratoire non configurée','[[s:rapport 4.3]][[s:rapport 4.2]]'],
+     ['Machine','Filtre 10 µm non remplacé depuis EN-24-05','[[s:rapport 4.3]]'],
+     ['Main d\'œuvre','Montage conforme, jeu 42 µm','[[s:rapport 4.1]]'],
+     ['Milieu','Huile 70 °C conforme','[[s:rapport 4.1]]']]},
+   {cap:'5 pourquoi', head:['N°','Pourquoi','Source'], rows:[
+     ['1','Écaillage amorcé sur des indentations','[[s:rapport 4.4]]'],
+     ['2','Passage de particules dures, comptage 18/16/13 contre 15/13/10','[[s:fiche NC]][[s:rapport 4.3]]'],
+     ['3','Débris de EN-24-05 restés dans le circuit','[[h]]'],
+     ['4','Filtre non remplacé et pas de contrôle de propreté','[[s:rapport 4.3]]'],
+     ['5','Absence de règle ou règle non appliquée','[[c]]']]},
+   {cap:'Causes candidates', head:['N°','Cause','Vraisemblance','Test pour trancher'], rows:[
+     ['1','Pollution du circuit d\'huile par les débris de EN-24-05','Forte','Composition des particules identique au matériau de cage ?'],
+     ['2','Défaut de matière localisé','Moyenne','Coupe métallographique et certificat matière'],
+     ['3','Surcharge locale par désalignement','Faible','Relevé d\'alignement, empreintes sur rouleaux (aucun marquage relevé)']]}]},
+ {d:'D5', t:'Actions correctives', tables:[{head:['Action','Vise','Responsable','Échéance'], rows:[
+   ['Remplacement du filtre, rinçage, contrôle ISO 4406 avant redémarrage','Cause 1','Essais','Avant reprise'],
+   ['Alarme vibratoire RMS et énergie à 236 Hz sur tous les canaux paliers du banc B2','Détection','Essais','2 semaines'],
+   ['Expertise métallographique et certificat matière','Cause 2','Laboratoire et BE','3 semaines'],
+   ['Décision de reprise avec le roulement n° 4','[[c]]','','']]}]},
+ {d:'D6', t:'Vérification', tables:[{head:['Vérification','Résultat attendu'], rows:[
+   ['Comptage ISO 4406 après rinçage','15/13/10 ou mieux'],
+   ['Test d\'injection d\'un signal à 236 Hz','Alarme déclenchée'],
+   ['Rapport de laboratoire','Cause 2 confirmée ou écartée']]}]},
+ {d:'D7', t:'Prévention', tables:[{head:['Mesure','Statut'], rows:[
+   ['Procédure banc : contrôle de propreté et remplacement de filtre obligatoires entre campagnes','À valider par la qualité'],
+   ['Règle d\'instrumentation : alarme vibratoire systématique sur les canaux paliers','À valider par essais'],
+   ['Bancs B1 et B3','[[c]]']]}]},
+ {d:'D8', t:'Clôture', tables:[{head:['Élément','Statut'], rows:[
+   ['Clôture','[[c]] après vérification'],
+   ['Archivage','Fiche NC, rapport EN-24-07, rapport de laboratoire, ce 8D'],
+   ['Fiche REX à créer','« Pollution de circuit d\'huile entre campagnes : écaillage de piste externe à 212 h »']]}]}
+];
+
+const RX = /\[\[(s|h|c)(?::([^\]]+))?\]\]/g;
+const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const html = s => esc(s).replace(RX, (m,k,v)=> k==='s' ? `<span class="tag s">${v}</span>` : k==='h' ? '<span class="tag h">hypothèse à confirmer</span>' : '<span class="tag c">à compléter</span>');
+const plain = s => s.replace(RX, (m,k,v)=> k==='s' ? `[source : ${v}] ` : k==='h' ? '[hypothèse à confirmer] ' : '[à compléter] ').replace(/\s+$/,'');
+
+const $ = id => document.getElementById(id);
+const out = $('out'), counter = $('counter'), gen = $('gen'), copyBtn = $('copy'), copied = $('copied');
+const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+let timers = [];
+
+function renderSection(s){
+  const el = document.createElement('article'); el.className = 'sec8' + (reduce ? '' : ' fade');
+  let h = `<h2><span class="d">${s.d}</span>${s.t}</h2>`;
+  s.tables.forEach(t=>{
+    if(t.cap) h += `<h4>${t.cap}</h4>`;
+    h += `<div class="tbl"><table><thead><tr>${t.head.map(c=>`<th>${c}</th>`).join('')}</tr></thead><tbody>${t.rows.map(r=>`<tr>${r.map(c=>`<td>${html(c)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+  });
+  el.innerHTML = h;
+  return el;
+}
+function count(n){
+  const q = c => out.querySelectorAll('.tag.'+c).length;
+  const txt = `${n} discipline${n>1?'s':''}, ${q('s')} faits sourcés, ${q('h')} hypothèses à confirmer, ${q('c')} rubriques à compléter`;
+  counter.textContent = n < D.length ? `Génération en cours : ${txt}` : txt;
+  counter.classList.remove('idle');
+}
+function reset(){
+  timers.forEach(clearTimeout); timers = [];
+  out.innerHTML = '<p class="placeholder">Le 8D apparaît ici, discipline par discipline.</p>';
+  counter.textContent = 'Brouillon 8D, gabarit qualité'; counter.classList.add('idle');
+  copied.textContent = ''; copyBtn.disabled = true; gen.disabled = false;
+}
+function generate(){
+  reset();
+  gen.disabled = true;
+  out.innerHTML = '';
+  D.forEach((s,i)=>{
+    timers.push(setTimeout(()=>{
+      out.appendChild(renderSection(s));
+      count(i+1);
+      if(i === D.length-1){ copyBtn.disabled = false; gen.disabled = false; }
+    }, i*800));
+  });
+}
+function asText(){
+  const lines = ['8D NC-2026-0417, brouillon généré', counter.textContent, ''];
+  D.forEach(s=>{
+    lines.push(`${s.d} ${s.t}`);
+    s.tables.forEach(t=>{
+      if(t.cap) lines.push(t.cap);
+      t.rows.forEach(r=>lines.push('  ' + r.map(plain).filter(Boolean).join(' ; ')));
+    });
+    lines.push('');
+  });
+  return lines.join('\n');
+}
+async function copy(){
+  const text = asText();
+  try{
+    await navigator.clipboard.writeText(text);
+    copied.textContent = 'Texte copié dans le presse-papier.';
+  }catch(e){
+    const sel = window.getSelection(), range = document.createRange();
+    range.selectNodeContents(out); sel.removeAllRanges(); sel.addRange(range);
+    copied.textContent = 'Copie automatique indisponible : le 8D est sélectionné, faites Ctrl+C.';
+  }
+}
+gen.addEventListener('click', generate);
+$('reset').addEventListener('click', reset);
+copyBtn.addEventListener('click', copy);
+</script>
+
+</body>
+</html>

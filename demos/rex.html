@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>L'assistant REX</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+</head>
+<body>
+<style>
+  /* Layout: scripted chat with the engineering knowledge-base agent (left, 7/12)
+     and the 14-document corpus (right, 5/12); cited documents light up while an answer is shown. */
+  :root{
+    --bg:#F6F4FB; --surface:#FFFFFF; --fg:#1A1240; --muted:#5F5885; --line:rgba(69,29,199,.16);
+    --accent:#451DC7; --accent-deep:#250F6B; --signal:#04F06A; --signal-ink:#027A38; --soft:#ECE8FA;
+    --high:#D64545; --mid:#D98E04; --low:#0E9F6E; --own:#451DC7; --hl:#CAFEE0;
+    --font-ui:"Poppins",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    --font-data:"IBM Plex Mono",ui-monospace,"Cascadia Mono",Consolas,monospace;
+  }
+  @media (prefers-color-scheme:dark){ :root:not([data-theme="light"]){
+    --bg:#140C2E; --surface:#1E1540; --fg:#F1EEFA; --muted:#B5ACD6; --line:rgba(255,255,255,.14);
+    --accent:#9D86F5; --accent-deep:#C9BDF7; --signal:#04F06A; --signal-ink:#5BF59A; --soft:#2A2054;
+    --high:#FF6B6B; --mid:#F2B134; --low:#3DD598; --own:#9D86F5; --hl:rgba(4,240,106,.22); color-scheme:dark } }
+  :root[data-theme="dark"]{
+    --bg:#140C2E; --surface:#1E1540; --fg:#F1EEFA; --muted:#B5ACD6; --line:rgba(255,255,255,.14);
+    --accent:#9D86F5; --accent-deep:#C9BDF7; --signal:#04F06A; --signal-ink:#5BF59A; --soft:#2A2054;
+    --high:#FF6B6B; --mid:#F2B134; --low:#3DD598; --own:#9D86F5; --hl:rgba(4,240,106,.22); color-scheme:dark }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--font-ui);font-size:15px;line-height:1.5;
+       padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 40px}
+  h1,h2,h3{margin:0;font-weight:500;letter-spacing:-.01em;text-wrap:balance}
+  p{margin:0}
+  .wrap{max-width:1180px;margin:0 auto}
+  header{padding:28px 0 16px;display:grid;gap:8px}
+  .eyebrow{font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:500}
+  h1{font-size:clamp(1.7rem,4vw,2.4rem);line-height:1.1;font-weight:300}
+  h1 b{font-weight:600;color:var(--accent)}
+  .lede{color:var(--muted);max-width:70ch}
+  .layout{margin-top:6px;display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:14px;align-items:start}
+  @media (max-width:900px){.layout{grid-template-columns:minmax(0,1fr)}}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px;display:grid;gap:8px;min-width:0;align-content:start}
+  .card h3{font-size:.95rem}
+  /* ---- chat ---- */
+  .chat{gap:12px}
+  .chat-top{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px}
+  .agent{display:flex;align-items:center;gap:10px;min-width:0}
+  .avatar{width:36px;height:36px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font-weight:600;flex:0 0 auto;font-size:.85rem}
+  .agent .who{font-weight:600;font-size:.95rem}
+  .agent .when{font-size:.8rem;color:var(--muted)}
+  .qs{display:flex;flex-wrap:wrap;gap:8px}
+  .qs button,.clear{font:inherit;font-weight:500;font-size:.9rem;border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:999px;padding:7px 14px;cursor:pointer}
+  .qs button:hover:not(:disabled){border-color:var(--accent)}
+  .qs button[data-done="true"]{background:var(--soft)}
+  .qs button:disabled,.clear:disabled{opacity:.55;cursor:default}
+  .qs button:focus-visible,.clear:focus-visible{outline:3px solid var(--signal);outline-offset:3px}
+  .clear{font-size:.82rem;padding:5px 12px;color:var(--muted)}
+  .log{display:grid;gap:12px;align-content:start;min-height:280px;max-height:min(760px,78vh);overflow-y:auto;padding:4px 2px;scroll-behavior:smooth}
+  @media (max-width:900px){.log{max-height:none}}
+  .empty{color:var(--muted);font-size:.9rem;border:1px dashed var(--line);border-radius:10px;padding:18px;text-align:center;align-self:center}
+  .bubble{border-radius:14px;padding:10px 14px;max-width:88%;min-width:0;overflow-wrap:break-word}
+  .bubble.user{justify-self:end;background:#250F6B;color:#fff;border-bottom-right-radius:4px}
+  .bubble.bot{justify-self:start;background:var(--bg);border:1px solid var(--line);border-bottom-left-radius:4px;display:grid;gap:8px;max-width:100%}
+  .bot p{font-size:.93rem}
+  .bot .fields{display:grid;gap:4px;margin:0;padding:0;list-style:none;font-size:.93rem}
+  .bot .fields b,.bot .lbl{font-weight:600}
+  .rub{display:grid;gap:3px;border-top:1px solid var(--line);padding-top:8px;font-size:.85rem}
+  .rub b{font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:500}
+  .rub ul{margin:0;padding-left:18px;display:grid;gap:2px}
+  .rub a{color:var(--accent);text-decoration:none}
+  .rub a:hover{text-decoration:underline}
+  .rub .d{font-family:var(--font-data);font-size:.78rem;color:var(--muted)}
+  .refusal{justify-self:start;font-size:.72rem;letter-spacing:.05em;text-transform:uppercase;font-weight:500;border-radius:6px;padding:2px 8px;border:1px solid var(--mid);color:var(--mid);margin-top:-6px}
+  .caret::after{content:"";display:inline-block;width:7px;height:1em;vertical-align:-2px;margin-left:2px;background:var(--accent);animation:blink 1s steps(1) infinite}
+  @keyframes blink{50%{opacity:0}}
+  /* ---- corpus ---- */
+  .docs{list-style:none;margin:0;padding:0;display:grid;gap:4px}
+  .doc{display:grid;grid-template-columns:30px minmax(0,1fr);gap:8px;border-radius:8px;padding:7px 8px;transition:background-color .25s}
+  .doc .num{font-family:var(--font-data);font-size:.8rem;color:var(--muted);padding-top:1px}
+  .doc a{color:var(--fg);text-decoration:none;font-size:.86rem;font-weight:500;line-height:1.35;overflow-wrap:anywhere}
+  .doc a:hover{color:var(--accent);text-decoration:underline}
+  .doc .m{font-size:.76rem;color:var(--muted)}
+  .doc.on{background:var(--hl)}
+  .doc.on .num{color:var(--fg);font-weight:500}
+  .note{font-size:.78rem;color:var(--muted)}
+  .legend{display:flex;align-items:center;gap:8px;font-size:.78rem;color:var(--muted)}
+  .legend i{display:inline-block;width:14px;height:10px;border-radius:3px;background:var(--hl);border:1px solid var(--line)}
+  /* ---- footer ---- */
+  .foot{margin-top:18px;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+  .foot .card p{font-size:.88rem;color:var(--muted)}
+  .foot .card strong{color:var(--fg)}
+  .src{margin-top:16px;font-size:.78rem;color:var(--muted)}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+</style>
+
+<div class="wrap">
+<header>
+  <div class="eyebrow">Prototype Wavestone, corpus public de 14 documents (NASA NTRS, AAIB, SKF), aucune donnée Safran</div>
+  <h1>L'assistant REX : <b>retrouver un cas, comprendre une règle, rédiger une fiche</b>, avec la source à chaque phrase</h1>
+  <p class="lede">Un agent branché sur la base de connaissances du bureau d'études (REX, standards, notes de calcul, rapports d'essais). Il répond à partir des documents, cite le paragraphe, nomme l'expert référent, et refuse tout ce qui sort de l'ingénierie. Cliquez sur une question.</p>
+</header>
+
+<div class="layout">
+  <section class="card chat" aria-label="Conversation avec l'agent">
+    <div class="chat-top">
+      <div class="agent"><div class="avatar">BC</div><div><div class="who">Agent Base de connaissances BE</div><div class="when">Copilot Studio, bibliothèques REX et standards</div></div></div>
+      <button class="clear" id="clear" type="button">Effacer</button>
+    </div>
+    <div class="qs" id="qs"></div>
+    <div class="log" id="log" aria-live="polite"><p class="empty" id="empty">Choisissez une question ci-dessus : la réponse s'affiche ici avec ses sources.</p></div>
+  </section>
+
+  <aside class="card" aria-label="Documents du corpus">
+    <h3>Documents du corpus</h3>
+    <div class="legend"><i></i>Document cité dans la réponse affichée</div>
+    <ol class="docs" id="docs"></ol>
+    <p class="note">Corpus de démonstration : documents publics téléchargeables. En production, l'agent lit les bibliothèques SharePoint et JILEC du bureau d'études.</p>
+  </aside>
+</div>
+
+<div class="foot">
+  <div class="card"><h3>Ce que fait l'agent</h3><p>Agent Copilot Studio sur les bibliothèques <strong>SharePoint / JILEC du BE</strong> : REX, standards, notes de calcul, rapports d'essais. Il hérite des droits d'accès de l'utilisateur, exclut les documents Confidentiel, et <strong>ne répond jamais sans source</strong>.</p></div>
+  <div class="card"><h3>Ce qu'un ingénieur y gagne</h3><p>Un REX retrouvé <strong>en deux minutes</strong> au lieu d'une demi-journée de recherche ou d'un mail à l'expert ; une fiche REX pré-rédigée en fin de campagne, donc une base qui se nourrit à chaque projet.</p></div>
+  <div class="card"><h3>Comment on le branche chez vous</h3><p><strong>Phase 1</strong>, huit semaines : BE pilote roulement et étanchéité, 20 à 30 ingénieurs, bibliothèques en lecture seule, dans le tenant Microsoft 365 de Safran. <strong>Phase 2</strong> : connecteurs PLM et GMAO, extension à la direction technique.</p></div>
+</div>
+<p class="src">Démonstration scriptée à partir de documents publics réels (NASA NTRS, UK AAIB, SKF) ; dans la version connectée, les réponses sont produites par l'agent sur les documents Safran. Wavestone, novembre 2026.</p>
+</div>
+
+<script>
+const DOCS = [
+ ['Bearing Damage and Failure Analysis (ISO 15243)','SKF','2017','https://cdn.skfmediahub.skf.com/api/public/093168a92d25cc46/pdf_preview_medium/093168a92d25cc46_pdf_preview_medium.pdf'],
+ ['Ferrographic and Spectrometer Oil Analysis From a Failed Gas Turbine Engine','NASA Lewis','1982','https://ntrs.nasa.gov/api/citations/19830004163/downloads/19830004163.pdf'],
+ ['Evaluation of Axial Lock-up of SSME Bearings (HPOTP)','NASA','1980','https://ntrs.nasa.gov/api/citations/19810004575/downloads/19810004575.pdf'],
+ ['Current Status of Hybrid Bearing Damage Detection','NASA Glenn','2004','https://ntrs.nasa.gov/api/citations/20040082335/downloads/20040082335.pdf'],
+ ['Tapered Roller Bearing Damage Detection Using Oil Debris Analysis','NASA Glenn','2006','https://ntrs.nasa.gov/api/citations/20060008937/downloads/20060008937.pdf'],
+ ['Filtration Effects on Ball Bearing Life in a Contaminated Lubricant','NASA Lewis','1978','https://ntrs.nasa.gov/api/citations/19780018503/downloads/19780018503.pdf'],
+ ['Bearing Fatigue Investigation 3','NASA','1982','https://ntrs.nasa.gov/api/citations/19830009609/downloads/19830009609.pdf'],
+ ['AAIB AAR 2/2011, Super Puma G-REDL, gearbox planet gear bearing failure','UK AAIB','2011','https://assets.publishing.service.gov.uk/media/54230251ed915d1371000ba1/Summary_AAR_2-2011__G-REDL.pdf'],
+ ['AAIB Bulletin 6/2021, EC175B G-EMEB alternator pinion bearing failure','UK AAIB','2021','https://assets.publishing.service.gov.uk/media/607fceace90e076ab6cbdced/EC175B_G-EMEB_06-21.pdf'],
+ ['Sealing in Turbomachinery (NASA TM-2006-214341)','NASA Glenn','2006','https://ntrs.nasa.gov/api/citations/20060051674/downloads/20060051674.pdf'],
+ ['Seal Technology for LOX Turbopumps','NASA','1985','https://ntrs.nasa.gov/api/citations/19880004221/downloads/19880004221.pdf'],
+ ['Floating Ring Shaft Seal for Liquid Rocket Turbopumps','NASA','1980','https://ntrs.nasa.gov/api/citations/19810017923/downloads/19810017923.pdf'],
+ ['Brush Seal Performance and Durability Issues, T-700 Engine Tests (NASA TM-106502)','NASA Lewis','1994','https://ntrs.nasa.gov/api/citations/19950005070/downloads/19950005070.pdf'],
+ ['A Model for the SSME HPOTP Shaft Seal System','NASA','1990','https://ntrs.nasa.gov/api/citations/19910011176/downloads/19910011176.pdf']
+];
+
+/* Blocks: {p:text} is a paragraph, {f:label, t:text} a labelled field of a REX sheet. */
+const QA = [
+ {label:'Cas déjà traité', q:'A-t-on déjà rencontré un échauffement anormal sur un roulement à rouleaux en essai d\'endurance ?',
+  blocks:[
+   {p:'Oui, deux cas documentés dans la base, et une règle à retenir.'},
+   {p:'Cas 1, AAIB Bulletin 6/2021 (doc. 9) : sur un EC175B, le roulement du pignon d\'alternateur a surchauffé jusqu\'à la rupture. Cause retenue : une charge axiale excessive introduite par la méthode d\'assemblage, pas par le roulement lui-même. Leçon : vérifier la précharge axiale après montage, avant le premier essai.'},
+   {p:'Cas 2, Bearing Fatigue Investigation 3 (doc. 7) : en essai d\'endurance de roulements aéronautiques, l\'échauffement précède l\'écaillage de piste ; la température de bague externe monte par paliers sur plusieurs heures avant la défaillance. Leçon : une dérive de 20 °C sans changement de charge justifie un prélèvement d\'huile et un relevé vibratoire.'},
+   {p:'Règle associée, Filtration Effects on Ball Bearing Life (doc. 6) : la durée de vie chute fortement quand le lubrifiant est contaminé ; une filtration à 3 µm au lieu de 40 µm multiplie la vie par environ 2 dans les essais rapportés. Si le circuit d\'huile a servi à une campagne précédente, contrôler la propreté avant de conclure sur le roulement.'}
+  ],
+  sources:[[9,'section Analysis'],[7,'section Test results'],[6,'Summary of results']],
+  expert:'roulements et lubrification (référentiel experts)'},
+ {label:'Règle ou standard', q:'Quelle règle s\'applique au choix entre joint brush et labyrinthe en amont d\'une enceinte palier, et qu\'est-ce qui change avec l\'usure ?',
+  blocks:[
+   {p:'Règle de référence, Sealing in Turbomachinery (doc. 10) : le labyrinthe est un joint sans contact dont la fuite dépend du jeu radial et du nombre de léchettes ; le joint brush est un joint à contact qui réduit la fuite de 50 à 90 % par rapport à un labyrinthe à jeu équivalent, au prix d\'une usure des poils et d\'un échauffement local. Le choix se fait sur la pression différentielle, la vitesse périphérique et la tolérance aux excursions radiales du rotor.'},
+   {p:'Ce qui change avec l\'usure, Brush Seal T-700 Engine Tests (doc. 13) : après rodage, la fuite du brush augmente puis se stabilise ; les poils s\'usent surtout lors des excursions radiales à froid. Le rapport recommande de dimensionner le jeu de rodage et de prévoir le remplacement du brush au même pas que les joints carbone voisins.'},
+   {p:'En langage courant : le brush fuit moins mais s\'use, le labyrinthe fuit plus mais ne s\'use pas ; en série (brush côté air chaud, labyrinthe côté enceinte) on combine les deux, c\'est la disposition de notre brevet US 9879607.'}
+  ],
+  sources:[[10,'chapitres Labyrinth seals et Brush seals'],[13,'Results and discussion']],
+  expert:'étanchéité dynamique (référentiel experts)'},
+ {label:'Fiche REX', q:'Rédige la fiche REX de la rupture du roulement de pignon d\'alternateur de l\'EC175B à partir du rapport.',
+  blocks:[
+   {p:'Brouillon de fiche REX, à valider par l\'expert avant publication dans JILEC.'},
+   {f:'Titre', t:'Surchauffe et rupture d\'un roulement de pignon d\'alternateur par charge axiale excessive au montage.'},
+   {f:'Contexte', t:'hélicoptère EC175B, boîte d\'accessoires, roulement à rouleaux du pignon d\'alternateur ; incident en vol, 2020 (doc. 9).'},
+   {f:'Problème constaté', t:'échauffement du roulement, dégradation de la cage, perte de l\'alternateur.'},
+   {f:'Causes identifiées', t:'charge axiale excessive introduite par la méthode d\'assemblage du pignon ; le roulement n\'était pas conçu pour reprendre cette charge.'},
+   {f:'Solution mise en œuvre', t:'révision de la procédure de montage et de la vérification de la précharge ; inspection de la flotte.'},
+   {f:'Leçon apprise', t:'toute modification de méthode de montage doit être suivie d\'une mesure de charge axiale résiduelle avant essai.'},
+   {f:'Documents sources', t:'AAIB Bulletin 6/2021 (doc. 9).'},
+   {f:'Expert référent proposé', t:'roulements et lubrification.'},
+   {f:'Mots-clés', t:'roulement, précharge axiale, montage, boîte d\'accessoires, surchauffe.'},
+   {p:'Rubriques à compléter : date exacte de l\'incident et numéro de série (non repris ici), référence interne du standard de montage. Message de notification proposé : « Bonjour, une fiche REX est en attente de votre validation : surchauffe de roulement par charge axiale au montage (source AAIB 6/2021). Merci de la relire dans JILEC. »'}
+  ],
+  sources:[[9,'rapport complet']],
+  expert:'roulements et lubrification (proposé)'},
+ {label:'Hors périmètre', q:'Combien de jours de congés me reste-t-il cette année ?',
+  blocks:[
+   {p:'Cette demande est hors du périmètre de l\'agent Base de connaissances BE. Je vous invite à passer par le portail RH ou à contacter votre gestionnaire. Je peux en revanche vous aider à retrouver un cas déjà traité, comprendre une règle ou un standard de conception, ou rédiger une fiche REX.'}
+  ],
+  sources:[], expert:null, refusal:true}
+];
+
+const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const $ = id => document.getElementById(id);
+const log = $('log'), qs = $('qs'), docsEl = $('docs'), clearBtn = $('clear');
+let timer = null, pending = null, busy = false;
+
+DOCS.forEach((d,i)=>{
+  const li = document.createElement('li'); li.className='doc'; li.dataset.n = i+1;
+  li.innerHTML = `<span class="num">${String(i+1).padStart(2,'0')}</span><div><a href="${d[3]}" target="_blank" rel="noopener">${d[0]}</a><div class="m">${d[1]}, ${d[2]}</div></div>`;
+  docsEl.appendChild(li);
+});
+QA.forEach((x,i)=>{
+  const b = document.createElement('button'); b.type='button'; b.textContent = x.label; b.title = x.q; b.dataset.i = i;
+  b.addEventListener('click', ()=>ask(i));
+  qs.appendChild(b);
+});
+
+function highlight(nums){
+  docsEl.querySelectorAll('.doc').forEach(li=>li.classList.toggle('on', nums.includes(+li.dataset.n)));
+}
+function setBusy(v){
+  busy = v;
+  qs.querySelectorAll('button').forEach(b=>b.disabled = v);
+}
+function el(tag, cls, text){ const e=document.createElement(tag); if(cls) e.className=cls; if(text!=null) e.textContent=text; return e; }
+
+function ask(i){
+  if(busy) return;
+  const x = QA[i];
+  const empty = $('empty'); if(empty) empty.remove();
+  const u = el('div','bubble user',x.q); log.appendChild(u);
+  u.scrollIntoView({block:'start', behavior: reduce ? 'auto' : 'smooth'});
+  qs.querySelector(`[data-i="${i}"]`).dataset.done = 'true';
+  setBusy(true);
+  pending = setTimeout(()=>answer(x), 600);
+}
+
+function answer(x){
+  pending = null;
+  highlight(x.sources.map(s=>s[0]));
+  const b = el('div','bubble bot'); log.appendChild(b);
+  const targets = [];
+  let list = null;
+  x.blocks.forEach(bl=>{
+    if(bl.p){ list = null; const p = el('p'); b.appendChild(p); targets.push({el:p, text:bl.p}); }
+    else {
+      if(!list){ list = el('ul','fields'); b.appendChild(list); }
+      const li = el('li'); li.appendChild(el('b',null,bl.f + ' : ')); const s = el('span'); li.appendChild(s); list.appendChild(li);
+      targets.push({el:s, text:bl.t});
+    }
+  });
+  typeInto(targets, ()=>finish(x,b));
+}
+
+function typeInto(targets, done){
+  if(reduce){ targets.forEach(t=>t.el.textContent=t.text); done(); return; }
+  let i=0, pos=0;
+  targets[0].el.classList.add('caret');
+  timer = setInterval(()=>{
+    let n = 30;
+    while(n>0 && i<targets.length){
+      const t = targets[i], take = Math.min(n, t.text.length-pos);
+      t.el.textContent += t.text.substr(pos, take); pos += take; n -= take;
+      if(pos >= t.text.length){ t.el.classList.remove('caret'); i++; pos=0; if(i<targets.length) targets[i].el.classList.add('caret'); }
+    }
+    if(i >= targets.length){ clearInterval(timer); timer=null; done(); }
+  }, 20);
+}
+
+function finish(x,b){
+  if(x.sources.length){
+    const r = el('div','rub'); r.appendChild(el('b',null,'Sources'));
+    const ul = el('ul');
+    x.sources.forEach(([n,where])=>{
+      const d = DOCS[n-1], li = el('li');
+      li.innerHTML = `<span class="d">doc. ${n}</span> <a href="${d[3]}" target="_blank" rel="noopener">${d[0]}</a>, ${where}`;
+      ul.appendChild(li);
+    });
+    r.appendChild(ul); b.appendChild(r);
+  }
+  if(x.expert){
+    const r = el('div','rub'); r.appendChild(el('b',null,'Expert référent')); r.appendChild(el('span',null,x.expert)); b.appendChild(r);
+  }
+  if(x.refusal){ log.appendChild(el('span','refusal','Refus : règle de périmètre')); }
+  setBusy(false);
+}
+
+clearBtn.addEventListener('click', ()=>{
+  if(timer){ clearInterval(timer); timer=null; }
+  if(pending){ clearTimeout(pending); pending=null; }
+  log.innerHTML = '<p class="empty" id="empty">Choisissez une question ci-dessus : la réponse s\'affiche ici avec ses sources.</p>';
+  qs.querySelectorAll('button').forEach(b=>delete b.dataset.done);
+  highlight([]); setBusy(false);
+});
+</script>
+
+</body>
+</html>
