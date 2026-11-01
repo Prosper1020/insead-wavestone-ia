@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Prototypes SAE R&T</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap">
+</head>
+<body>
+
+
+<style>
+  /* Layout: one hub page, four cards (one per prototype), then the two kits as readable sections. */
+  :root{ --bg:#F6F4FB; --surface:#FFFFFF; --fg:#1A1240; --muted:#5F5885; --line:rgba(69,29,199,.16); --accent:#451DC7; --deep:#250F6B; --signal:#04F06A; --soft:#ECE8FA;
+         --font:"Poppins",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif }
+  @media (prefers-color-scheme:dark){ :root:not([data-theme="light"]){ --bg:#140C2E; --surface:#1E1540; --fg:#F1EEFA; --muted:#B5ACD6; --line:rgba(255,255,255,.14); --accent:#9D86F5; --deep:#C9BDF7; --soft:#2A2054; color-scheme:dark } }
+  :root[data-theme="dark"]{ --bg:#140C2E; --surface:#1E1540; --fg:#F1EEFA; --muted:#B5ACD6; --line:rgba(255,255,255,.14); --accent:#9D86F5; --deep:#C9BDF7; --soft:#2A2054; color-scheme:dark }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--font);font-size:15px;line-height:1.55;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 48px}
+  .wrap{max-width:980px;margin:0 auto}
+  h1,h2,h3{margin:0;font-weight:500;letter-spacing:-.01em;text-wrap:balance}
+  p{margin:0}
+  header{padding:28px 0 18px;display:grid;gap:8px}
+  .eyebrow{font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:500}
+  h1{font-size:clamp(1.6rem,4vw,2.3rem);font-weight:300;line-height:1.15} h1 b{font-weight:600;color:var(--accent)}
+  .lede{color:var(--muted);max-width:70ch}
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-top:10px}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px;display:grid;gap:8px;align-content:start;min-width:0}
+  .card .n{font-size:.75rem;letter-spacing:.06em;text-transform:uppercase;color:var(--accent);font-weight:600}
+  .card h2{font-size:1.05rem}
+  .card p{font-size:.9rem;color:var(--muted)}
+  .state{display:inline-block;font-size:.75rem;border-radius:999px;padding:2px 10px;background:var(--soft);font-weight:500}
+  .state.ok{background:rgba(4,240,106,.25);color:var(--fg)}
+  .btn{display:inline-block;font-weight:500;font-size:.9rem;background:#250F6B;color:#fff;border-radius:999px;padding:8px 16px;text-decoration:none;justify-self:start}
+  .btn.sec{background:var(--soft);color:var(--fg)}
+  .btn:focus-visible{outline:3px solid var(--signal);outline-offset:3px}
+  section{margin-top:28px;display:grid;gap:10px}
+  section h2{font-size:1.25rem;color:var(--deep)}
+  section h3{font-size:1rem;margin-top:8px}
+  ol,ul{margin:0;padding-left:22px;display:grid;gap:4px} li{font-size:.93rem}
+  .box{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px;display:grid;gap:8px}
+  pre{white-space:pre-wrap;font-family:inherit;font-size:.9rem;background:var(--soft);border-radius:8px;padding:12px 14px;margin:0}
+  table{border-collapse:collapse;width:100%;font-size:.9rem} th,td{text-align:left;vertical-align:top;padding:7px 8px;border-bottom:1px solid var(--line)} th{font-weight:500;color:var(--muted);font-size:.75rem;text-transform:uppercase;letter-spacing:.05em}
+  .tbl{overflow-x:auto}
+  .note{font-size:.8rem;color:var(--muted)}
+</style>
+<div class="wrap">
+<header>
+  <div class="eyebrow">Wavestone x Safran Aircraft Engines, R&T étanchéité et roulements, réunion du 4 novembre 2026</div>
+  <h1>Quatre prototypes, <b>un par famille</b> d'usage de l'IA en ingénierie</h1>
+  <p class="lede">Aucune donnée Safran : jeux de données publics (NASA IMS, offices de brevets) et cas fictifs. Deux pages de démonstration prêtes, deux agents Copilot à monter dans le tenant Wavestone avec les kits ci-dessous.</p>
+</header>
+
+<div class="cards">
+  <div class="card"><span class="n">1. Savoir capitalisé</span><h2>L'assistant REX</h2><p>Agent Copilot Studio sur un corpus public de rapports NASA et FAA : retrouver un cas, comprendre une règle, rédiger une fiche REX, avec les sources citées.</p><span class="state">Kit prêt, agent à monter (45 min)</span><a class="btn sec" href="#kit1">Voir le kit</a></div>
+  <div class="card"><span class="n">2. Veille et état de l'art</span><h2>L'alerte brevets du lundi</h2><p>Huit publications réelles 2024-2025 classées et résumées ; analyse de RTX EP 3293360 B1 face au brevet Safran de 2014 ; dossier d'antériorité.</p><span class="state ok">Démo prête</span><a class="btn" href="brevets.html">Ouvrir la démo</a></div>
+  <div class="card"><span class="n">3. Données d'essais et modèles</span><h2>Le roulement qui va lâcher</h2><p>Essai d'endurance NASA IMS rejoué : alarme 70 h avant la rupture, signature bague externe à 236 Hz, diagnostic en langage courant.</p><span class="state ok">Démo prête</span><a class="btn" href="roulement.html">Ouvrir la démo</a></div>
+  <div class="card"><span class="n">4. Qualité et documentation</span><h2>Le 8D en dix minutes</h2><p>Copilot pré-remplit le 8D (D1 à D8, Ishikawa, 5 pourquoi) à partir d'une fiche de non-conformité et d'un rapport d'essai, en marquant ce qui reste à confirmer.</p><span class="state">Kit prêt, agent à monter (20 min)</span><a class="btn sec" href="#kit4">Voir le kit</a></div>
+</div>
+
+<section>
+  <h2>Ordre proposé pour les 20 minutes de démonstration</h2>
+  <div class="box"><ol>
+    <li>Assistant REX, live dans Teams, 4 min : les trois questions, puis une question hors périmètre pour montrer le refus.</li>
+    <li>Alerte brevets, page, 4 min : lire une ligne de l'alerte, puis l'onglet « Analyse à la demande » (RTX 2025 face à notre brevet 2014). Pour Mohamed Andasmas.</li>
+    <li>Roulement, page, 4 min : « Lancer l'essai » à 6 h / s, s'arrêter à l'alarme, montrer le spectre d'enveloppe à la fin. Pour Gregory Honoré.</li>
+    <li>8D, 3 min : ouvrir le cas, montrer le 8D généré (live dans Word ou exemple), insister sur les « à compléter ».</li>
+    <li>5 min : « lequel on construit chez vous en premier ? »</li>
+  </ol></div>
+</section>
+
+<section id="kit1">
+  <h2>Kit 1. L'assistant REX, pas-à-pas Copilot Studio</h2>
+  <div class="box">
+    <p>Objectif : un agent qui répond aux trois questions du deck à partir d'un corpus public (rapports NASA NTRS et notes FAA sur joints brush / labyrinthe et roulements de turbomachine), en citant ses sources. Les instructions complètes de l'agent et le corpus sont dans le dossier <code>6. Go_To_Market_Aero/03. Demo</code> (fichiers <code>Agent_Copilot_Instructions_FR.md</code>, <code>Demo_Corpus_Manifest.csv</code>, <code>Download-DemoCorpus.ps1</code>).</p>
+    <h3>Montage (45 minutes)</h3>
+    <ol>
+      <li><b>Corpus.</b> Lancer <code>Download-DemoCorpus.ps1</code>. Déposer les PDF dans une bibliothèque SharePoint <code>Demo-BE-Corpus</code>, un dossier par type (REX, Standards, Rapports_essais, Notes_calcul). Renommer les fichiers avec un préfixe lisible, c'est ce que l'agent citera.</li>
+      <li><b>Agent.</b> Copilot Studio, Créer, Nouvel agent, Configurer manuellement. Nom « Base de connaissances BE (démo) ». Coller les instructions. Orchestration générative activée.</li>
+      <li><b>Connaissances.</b> Ajouter la bibliothèque SharePoint. Désactiver « utiliser les connaissances générales » pour forcer les citations.</li>
+      <li><b>Experts.</b> Liste SharePoint <code>Experts</code> (Sujet, Nom, Service) avec quatre lignes fictives, ajoutée comme source.</li>
+      <li><b>Fiche REX (optionnel).</b> Flux Power Automate « Créer un élément » dans une liste <code>REX_a_valider</code>. Sans flux, l'agent rédige la fiche dans le chat.</li>
+      <li><b>Publication</b> dans un canal Teams ; tester dans Teams, les citations s'affichent mieux.</li>
+    </ol>
+    <h3>Les trois questions de la démo</h3>
+    <ol>
+      <li>« A-t-on déjà rencontré un échauffement anormal sur un roulement de ce type en essai d'endurance ? » Attendu : synthèse contexte / constat / cause / leçon, deux citations, expert référent.</li>
+      <li>« Quelle règle de conception s'applique à un joint brush en amont d'une enceinte palier, et qu'est-ce qui change entre deux versions ? » Attendu : règle en langage courant, paragraphe source.</li>
+      <li>« Rédige la fiche REX de cette campagne d'essais à partir du rapport. » Attendu : fiche structurée, rubriques incomplètes signalées, mention « à valider ».</li>
+    </ol>
+    <p>Puis une question hors périmètre (« Combien de jours de congés me reste-t-il ? ») pour montrer le refus en trois phrases.</p>
+    <h3>Jeu de 15 questions de test (lundi soir)</h3>
+    <div class="tbl"><table><thead><tr><th>Dans le périmètre (source attendue)</th><th>Hors périmètre (refus attendu)</th></tr></thead><tbody>
+      <tr><td>Quels mécanismes d'usure sont documentés sur les joints brush à haute température ?</td><td>Rédige un mail à mon manager pour demander une formation.</td></tr>
+      <tr><td>Quel jeu radial est recommandé entre léchettes de labyrinthe et abradable ?</td><td>Quel temps fera-t-il à Villaroche mercredi ?</td></tr>
+      <tr><td>Quelle est la fréquence de défaut de bague externe et comment se calcule-t-elle ?</td><td>Donne-moi la procédure de note de frais.</td></tr>
+      <tr><td>Un rapport mentionne-t-il un grippage après arrêt court ?</td><td>Quelle est la capitale de l'Australie ?</td></tr>
+      <tr><td>Quels indicateurs vibratoires suivent la dégradation d'un roulement en essai ?</td><td>Résume les dernières actualités de Safran.</td></tr>
+      <tr><td>Différence entre un joint à vis (windback) et un labyrinthe pour une enceinte palier ?</td><td></td></tr>
+      <tr><td>Résume le rapport X en cinq lignes avec les paragraphes cités.</td><td></td></tr>
+      <tr><td>Qui est l'expert référent sur la lubrification ?</td><td></td></tr>
+      <tr><td>Compare les deux rapports sur les brush seals.</td><td></td></tr>
+      <tr><td>Prépare une fiche REX à partir du rapport Y.</td><td></td></tr>
+    </tbody></table></div>
+    <p class="note">Noter pour chaque question : source citée (oui / non), réponse juste (oui / partiel / non), temps de réponse. Objectif : 10 / 10 sourcées, 5 / 5 refus. Si le live casse mercredi, les captures d'écran des trois réponses prennent le relais.</p>
+  </div>
+</section>
+
+<section id="kit4">
+  <h2>Kit 4. Le 8D en dix minutes</h2>
+  <div class="box">
+    <p>Fichiers dans <code>Pitch_Safran/Prototypes/4_8D</code> : <code>Cas_NC_echauffement_roulement.docx</code> (fiche de non-conformité fictive NC-2026-0417 et extrait du rapport d'essai EN-24-07), <code>Modele_8D.docx</code> (gabarit vierge), <code>Exemple_8D_genere.docx</code> (ce que l'agent doit produire, à montrer si le live ne tourne pas).</p>
+    <h3>Montage (20 minutes)</h3>
+    <ul>
+      <li><b>Option A, Copilot dans Word :</b> ouvrir le gabarit, « Rédiger avec Copilot », joindre le cas et coller le prompt ci-dessous.</li>
+      <li><b>Option B, agent Copilot Studio :</b> nouvel agent « Assistant 8D (démo) », instructions ci-dessous, connaissances : le dossier SharePoint contenant les deux docx, publication dans Teams.</li>
+    </ul>
+    <h3>Prompt pour la démo (option A)</h3>
+    <pre>Rédige le 8D de la non-conformité décrite dans le document joint, en suivant le gabarit de ce document. Propose un Ishikawa et un 5 pourquoi en D4, trois causes candidates classées, et marque clairement ce qui reste à confirmer. Cite les sections du rapport d'essai.</pre>
+    <h3>Instructions de l'agent (option B)</h3>
+    <pre>RÔLE
+Tu es l'assistant qualité du bureau d'études. Tu aides l'ingénieur à rédiger un rapport 8D structuré à partir d'une fiche de non-conformité et des documents d'essai fournis. Tu réponds en français, avec le vocabulaire de la qualité aéronautique (AS9100, 8D, 5 pourquoi, Ishikawa, action corrective, action préventive).
+
+RÈGLES
+Tu ne complètes une rubrique qu'avec des éléments présents dans les documents fournis ou déduits explicitement ; chaque déduction est marquée « hypothèse à confirmer ». Tu laisses vides, avec la mention « à compléter par l'équipe », les rubriques sans information. Tu cites le document et le paragraphe pour chaque fait. Tu ne proposes jamais de cause racine unique : au moins trois, classées par vraisemblance, avec ce qui permettrait de trancher.
+
+PARCOURS
+D1 Équipe (rôles et personnes citées). D2 Description (quoi, où, quand, combien, détecté par, mesures chiffrées). D3 Confinement (actions immédiates décrites, sinon « à compléter »). D4 Causes racines : Ishikawa en cinq branches à partir des faits, 5 pourquoi sur la branche la plus vraisemblable, trois causes candidates classées avec le test qui permettrait de les départager. D5 Actions correctives, D6 Mise en œuvre et vérification (un indicateur par action), D7 Prévention (standards et règles à mettre à jour), D8 Clôture (archivage, REX à créer). Termine par la liste des hypothèses à confirmer et des rubriques à compléter, puis propose d'envoyer le brouillon au pilote 8D.
+
+FORMAT
+Titres D1 à D8 du gabarit, tableaux pour D4 et D5, deux pages.</pre>
+    <h3>Le cas, en deux phrases</h3>
+    <p>Roulement à rouleaux du palier n° 3 en essai d'endurance : température de bague externe de 95 °C à 148 °C en 35 minutes à 212 h sur 300 h, écaillage de 18 mm sur la piste externe, particules dans l'huile, filtre non remplacé depuis la campagne précédente, alarme vibratoire non configurée alors que le spectre d'enveloppe montrait le pic à 236 Hz dès 205 h. L'agent doit remonter à la pollution du circuit d'huile comme cause la plus vraisemblable et laisser visibles les hypothèses et les trous.</p>
+    <p class="note">Ce qu'il faut dire en séance : l'agent ne décide rien, il fait la mise en forme et la première analyse que l'ingénieur fait aujourd'hui en deux heures le vendredi soir. Le 8D sort pré-rempli, sourcé, avec ses trous visibles.</p>
+  </div>
+</section>
+
+<section>
+  <h2>À vérifier avant mercredi</h2>
+  <div class="box"><ul>
+    <li>Clé Espacenet OPS (inscription gratuite sur developers.epo.org, validation sous 24 h) pour le script de veille en live ; sinon la page de démo suffit.</li>
+    <li>Montage des deux agents Copilot (kits 1 et 4) dans le tenant Wavestone, lundi.</li>
+    <li>Le brevet US 12203382 B1 (roulements) n'a pas pu être lu en détail : déposant à confirmer, ou le retirer de l'alerte.</li>
+    <li>Les pages de démo sont publiques sur cette adresse : pas de connexion nécessaire sur le poste de la salle.</li>
+  </ul></div>
+  <p class="note">Sources publiques : IMS Bearing Data Set (University of Cincinnati, NASA Prognostics Data Repository) ; Google Patents, EPO Global Patent Index et serveur de publication, Official Gazette USPTO, consultés le 1er novembre 2026.</p>
+</section>
+</div>
+
+</body>
+</html>

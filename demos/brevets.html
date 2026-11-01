@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>L'alerte brevets du lundi</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+</head>
+<body>
+<style>
+  /* Layout: a three-tab reading tool. Tab 1 is the Monday Teams message (list + reading pane),
+     tab 2 the claim-by-claim analysis against Safran's own patent, tab 3 the prior-art dossier. */
+  :root{
+    --bg:#F6F4FB; --surface:#FFFFFF; --fg:#1A1240; --muted:#5F5885; --line:rgba(69,29,199,.16);
+    --accent:#451DC7; --accent-deep:#250F6B; --signal:#04F06A; --signal-ink:#027A38; --soft:#ECE8FA;
+    --high:#D64545; --mid:#D98E04; --low:#0E9F6E; --own:#451DC7;
+    --font-ui:"Poppins",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    --font-data:"IBM Plex Mono",ui-monospace,"Cascadia Mono",Consolas,monospace;
+  }
+  @media (prefers-color-scheme:dark){ :root:not([data-theme="light"]){
+    --bg:#140C2E; --surface:#1E1540; --fg:#F1EEFA; --muted:#B5ACD6; --line:rgba(255,255,255,.14);
+    --accent:#9D86F5; --accent-deep:#C9BDF7; --signal:#04F06A; --signal-ink:#5BF59A; --soft:#2A2054;
+    --high:#FF6B6B; --mid:#F2B134; --low:#3DD598; --own:#9D86F5; color-scheme:dark } }
+  :root[data-theme="dark"]{
+    --bg:#140C2E; --surface:#1E1540; --fg:#F1EEFA; --muted:#B5ACD6; --line:rgba(255,255,255,.14);
+    --accent:#9D86F5; --accent-deep:#C9BDF7; --signal:#04F06A; --signal-ink:#5BF59A; --soft:#2A2054;
+    --high:#FF6B6B; --mid:#F2B134; --low:#3DD598; --own:#9D86F5; color-scheme:dark }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--font-ui);font-size:15px;line-height:1.5;
+       padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 40px}
+  h1,h2,h3{margin:0;font-weight:500;letter-spacing:-.01em;text-wrap:balance}
+  p{margin:0}
+  .wrap{max-width:1180px;margin:0 auto}
+  header{padding:28px 0 16px;display:grid;gap:8px}
+  .eyebrow{font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:500}
+  h1{font-size:clamp(1.7rem,4vw,2.4rem);line-height:1.1;font-weight:300}
+  h1 b{font-weight:600;color:var(--accent)}
+  .lede{color:var(--muted);max-width:70ch}
+  .tabs{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+  .tabs button{font:inherit;font-weight:500;border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:999px;padding:8px 16px;cursor:pointer}
+  .tabs button[aria-selected="true"]{background:#250F6B;color:#fff;border-color:#250F6B}
+  .tabs button:focus-visible{outline:3px solid var(--signal);outline-offset:3px}
+  .view[hidden]{display:none}
+  /* ---- Monday message ---- */
+  .teams{margin-top:14px;display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:14px}
+  @media (max-width:900px){.teams{grid-template-columns:minmax(0,1fr)}}
+  .msg{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px;display:grid;gap:10px;min-width:0}
+  .msg .from{display:flex;align-items:center;gap:10px}
+  .avatar{width:36px;height:36px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font-weight:600;flex:0 0 auto}
+  .from .who{font-weight:600}
+  .from .when{font-size:.8rem;color:var(--muted)}
+  .msg h2{font-size:1.05rem}
+  .stats{display:flex;flex-wrap:wrap;gap:6px}
+  .stat{font-size:.78rem;border-radius:999px;padding:3px 10px;background:var(--soft);color:var(--fg)}
+  .items{display:grid;gap:6px;margin:0;padding:0;list-style:none}
+  .item{border:1px solid var(--line);border-radius:10px;padding:10px 12px;cursor:pointer;display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;align-items:start;background:var(--surface)}
+  .item[aria-current="true"]{border-color:var(--accent);box-shadow:0 0 0 2px var(--soft)}
+  .item:focus-visible{outline:3px solid var(--signal);outline-offset:2px}
+  .lvl{width:10px;height:10px;border-radius:50%;margin-top:7px;background:var(--low)}
+  .lvl[data-l="haute"]{background:var(--high)} .lvl[data-l="moyenne"]{background:var(--mid)} .lvl[data-l="interne"]{background:var(--own)}
+  .item .t{font-weight:500;font-size:.93rem}
+  .item .m{font-size:.78rem;color:var(--muted);font-family:var(--font-data)}
+  .item .s{font-size:.85rem;color:var(--muted)}
+  .legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:.78rem;color:var(--muted)}
+  .legend i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px}
+  .read{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px;display:grid;gap:12px;min-width:0;align-content:start}
+  .read .num{font-family:var(--font-data);font-size:.85rem;color:var(--muted)}
+  .read h2{font-size:1.15rem}
+  .meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px 14px;font-size:.85rem}
+  .meta div{display:grid;gap:1px}
+  .meta b{font-weight:500;color:var(--muted);font-size:.75rem;text-transform:uppercase;letter-spacing:.05em}
+  .pills{display:flex;flex-wrap:wrap;gap:6px}
+  .pill{font-family:var(--font-data);font-size:.75rem;border:1px solid var(--line);border-radius:6px;padding:2px 8px}
+  .why{border-left:3px solid var(--signal);padding-left:12px;display:grid;gap:4px}
+  .why b{font-size:.78rem;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:500}
+  .sum ol{margin:0;padding-left:18px;display:grid;gap:3px;font-size:.93rem}
+  .actions{display:flex;flex-wrap:wrap;gap:8px}
+  .actions a,.actions button{font:inherit;font-size:.85rem;font-weight:500;border-radius:999px;padding:6px 14px;border:1px solid var(--line);background:var(--surface);color:var(--accent);text-decoration:none;cursor:pointer}
+  .actions .primary{background:#250F6B;color:#fff;border-color:#250F6B}
+  .note{font-size:.78rem;color:var(--muted)}
+  /* ---- analysis ---- */
+  .ask{margin-top:14px;background:#250F6B;color:#fff;border-radius:12px;padding:14px 16px;display:grid;gap:6px}
+  .ask .q{font-family:var(--font-data);font-size:.95rem}
+  .ask .who{font-size:.8rem;color:rgba(255,255,255,.75)}
+  .cmp{margin-top:14px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px}
+  @media (max-width:900px){.cmp{grid-template-columns:minmax(0,1fr)}}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px;display:grid;gap:8px;min-width:0;align-content:start}
+  .card h3{font-size:.95rem}
+  .card .tag{display:inline-block;font-size:.72rem;letter-spacing:.05em;text-transform:uppercase;border-radius:6px;padding:2px 8px;background:var(--soft);color:var(--fg);font-weight:500}
+  .claim{font-size:.9rem;background:var(--soft);border-radius:8px;padding:10px 12px}
+  .claim em{font-style:normal;background:rgba(4,240,106,.35);border-radius:3px;padding:0 2px}
+  table{border-collapse:collapse;width:100%;font-size:.88rem}
+  th,td{text-align:left;vertical-align:top;padding:8px 8px;border-bottom:1px solid var(--line)}
+  th{font-weight:500;color:var(--muted);font-size:.75rem;text-transform:uppercase;letter-spacing:.05em}
+  .tbl{overflow-x:auto}
+  .verdict{margin-top:14px;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+  .verdict .card p{font-size:.9rem}
+  .v-high{border-color:var(--high)}
+  /* ---- dossier ---- */
+  .dossier{margin-top:14px;display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:14px}
+  @media (max-width:900px){.dossier{grid-template-columns:minmax(0,1fr)}}
+  .steps{display:grid;gap:8px;counter-reset:s}
+  .step{display:grid;grid-template-columns:28px minmax(0,1fr);gap:10px;align-items:start}
+  .step::before{counter-increment:s;content:counter(s);width:26px;height:26px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font-size:.8rem;font-weight:600}
+  .step b{display:block;font-weight:500}
+  .step span{font-size:.88rem;color:var(--muted)}
+  .foot{margin-top:18px;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+  .foot .card p{font-size:.88rem;color:var(--muted)}
+  .foot .card strong{color:var(--fg)}
+  .src{margin-top:16px;font-size:.78rem;color:var(--muted)}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+<header>
+  <div class="eyebrow">Prototype Wavestone, publications réelles (EPO, USPTO, OMPI), aucune donnée Safran</div>
+  <h1>L'alerte brevets du lundi : <b>huit publications lues</b>, classées, résumées, avant le premier café</h1>
+  <p class="lede">Chaque lundi, l'agent interroge les bases brevets sur les thèmes suivis par l'équipe étanchéité et roulements (classes CPC F16J 15, F01D 11, F16C 19 et 33), filtre les déposants qui comptent, lit les abrégés et la première revendication, puis poste un message dans Teams. Trois parcours ci-dessous : l'alerte, l'analyse d'un brevet à la demande, le dossier d'antériorité.</p>
+  <div class="tabs" role="tablist">
+    <button role="tab" aria-selected="true" data-v="v1" type="button">1. L'alerte du lundi</button>
+    <button role="tab" aria-selected="false" data-v="v2" type="button">2. Analyse à la demande</button>
+    <button role="tab" aria-selected="false" data-v="v3" type="button">3. Dossier d'antériorité</button>
+  </div>
+</header>
+
+<!-- ================= VIEW 1 ================= -->
+<section class="view" id="v1">
+  <div class="teams">
+    <div class="msg">
+      <div class="from"><div class="avatar">VB</div><div><div class="who">Veille brevets, étanchéité et roulements</div><div class="when">Lundi 07:30, canal Teams « R&T étanchéité et roulements »</div></div></div>
+      <h2>8 publications retenues sur 61 remontées par la requête</h2>
+      <div class="stats"><span class="stat">2 à lire cette semaine</span><span class="stat">2 pour information</span><span class="stat">4 de notre portefeuille, pour mémoire</span><span class="stat">Déposants suivis : RTX, GE, Rolls-Royce, MTU, Safran</span></div>
+      <ul class="items" id="items"></ul>
+      <div class="legend"><span><i style="background:var(--high)"></i>Pertinence haute</span><span><i style="background:var(--mid)"></i>Moyenne</span><span><i style="background:var(--low)"></i>Faible</span><span><i style="background:var(--own)"></i>Portefeuille Safran</span></div>
+      <p class="note">Échantillon de démonstration : publications réelles de 2024 et 2025 réunies dans un seul message. En production, l'alerte couvre les sept derniers jours et chaque ligne renvoie au document complet.</p>
+    </div>
+    <div class="read" id="read"></div>
+  </div>
+</section>
+
+<!-- ================= VIEW 2 ================= -->
+<section class="view" id="v2" hidden>
+  <div class="ask">
+    <div class="q">« Que revendique exactement EP 3293360 B1, et en quoi diffère-t-il de notre brevet brosse + labyrinthe ? »</div>
+    <div class="who">Question posée dans le chat de l'agent par un ingénieur étanchéité, réponse en 40 secondes</div>
+  </div>
+  <div class="cmp">
+    <div class="card">
+      <span class="tag">Brevet analysé</span>
+      <h3>EP 3293360 B1, Seal system with primary and secondary seal arrangement</h3>
+      <div class="meta"><div><b>Déposant</b>United Technologies Corp. (aujourd'hui RTX)</div><div><b>Priorité</b>13 sept. 2016 (US 62/393,867)</div><div><b>Délivrance</b>29 oct. 2025</div><div><b>CPC</b>F01D 11/00, F16J 15/3288, F16J 15/447</div></div>
+      <div class="claim"><b>Revendication 1 (texte intégral)</b><br>A seal system for a gas turbine engine comprising: <em>a cartridge</em>; <em>a runner</em>; <em>a first seal</em> between the cartridge and the runner; and <em>a second seal</em> between the cartridge and the runner.</div>
+      <p class="note">Lecture de l'agent : la revendication 1 est très large (deux joints entre une cartouche et une piste). Les limitations utiles sont dans la description et les revendications dépendantes : brosse côté air haute pression, labyrinthe ou joint à vis (windback) côté enceinte palier.</p>
+    </div>
+    <div class="card">
+      <span class="tag">Notre référence</span>
+      <h3>US 9879607 B2, Sealing of turbine engine enclosures produced by brush seal and labyrinth</h3>
+      <div class="meta"><div><b>Déposant</b>Snecma, aujourd'hui Safran Aircraft Engines</div><div><b>Publication A1</b>9 oct. 2014 (US 2014/0300058)</div><div><b>Délivrance</b>30 janv. 2018</div><div><b>Objet</b>Enceinte de turbomachine</div></div>
+      <div class="claim"><b>Abrégé (résumé)</b><br>Dispositif d'étanchéité d'une enceinte comprenant <em>un joint à brosse</em> dont les poils frottent sur un organe rotatif pour créer une différence de pression, et <em>un joint de type labyrinthe</em> placé <em>en série</em> avec le joint à brosse, entre l'intérieur de l'enceinte et son environnement extérieur.</div>
+      <p class="note">Ce brevet est cité comme art antérieur par deux demandes United Technologies (US 2018/0306044, US 2019/0145420) et par Pratt & Whitney Canada (US 11293295 B2, labyrinthe à ailettes inclinées).</p>
+    </div>
+  </div>
+  <div class="card tbl" style="margin-top:14px">
+    <h3>Comparaison élément par élément</h3>
+    <table>
+      <thead><tr><th>Élément</th><th>EP 3293360 B1 (RTX)</th><th>US 9879607 B2 (Safran)</th><th>Lecture</th></tr></thead>
+      <tbody>
+        <tr><td>Fonction</td><td>Étancher une enceinte de palier contre l'air chaud haute pression et retenir l'huile</td><td>Étancher une enceinte de turbomachine entre intérieur et extérieur</td><td>Même fonction, même zone moteur</td></tr>
+        <tr><td>Joint primaire</td><td>Brosse, côté air haute pression</td><td>Brosse, poils en contact avec l'organe rotatif</td><td>Identique dans le principe</td></tr>
+        <tr><td>Joint secondaire</td><td>Labyrinthe, ou en variante joint à vis (windback)</td><td>Labyrinthe en série avec la brosse</td><td>Le windback est la seule variante absente chez nous</td></tr>
+        <tr><td>Architecture</td><td>Cartouche et piste (runner) portant les deux joints</td><td>Pas de cartouche revendiquée</td><td>Différence structurelle principale</td></tr>
+        <tr><td>Problème visé</td><td>Usure des joints carbone (conicité, dispersion de montage), fuites d'huile vers compresseur ou turbine</td><td>Différence de pression créée par la brosse, labyrinthe en complément</td><td>Le texte RTX cible le remplacement des joints carbone</td></tr>
+        <tr><td>Dates</td><td>Priorité 13 sept. 2016</td><td>Publication 9 oct. 2014</td><td>Notre publication est antérieure de deux ans</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="verdict">
+    <div class="card v-high"><h3>Ce que l'agent conclut</h3><p>Proximité forte sur le principe (brosse + labyrinthe en série sur une enceinte). La différence revendiquée tient à la cartouche et à la variante windback. Notre publication de 2014 est antérieure à la priorité RTX de 2016 : elle est opposable comme art antérieur si la question se pose.</p></div>
+    <div class="card"><h3>Ce qu'il propose de faire</h3><p>Transmettre la fiche au service PI pour avis sur la liberté d'exploitation des architectures à cartouche. Vérifier si nos conceptions récentes utilisent un joint à vis derrière la brosse. Ajouter EP 3293360 au dossier de veille « enceintes palier ».</p></div>
+    <div class="card"><h3>Ce qu'il ne fait pas</h3><p>Il ne rend pas d'avis juridique et ne remplace pas la lecture des revendications dépendantes par un ingénieur. Chaque affirmation renvoie au paragraphe source du brevet ; le dernier mot reste à l'expert et à la PI.</p></div>
+  </div>
+</section>
+
+<!-- ================= VIEW 3 ================= -->
+<section class="view" id="v3" hidden>
+  <div class="ask">
+    <div class="q">« Prépare l'état de l'art pour notre idée : labyrinthe abradable avec zones de fragilité localisées pour éviter le grippage après un arrêt court. »</div>
+    <div class="who">Demande faite avant un dépôt, l'agent prépare le dossier que l'ingénieur et la PI finalisent</div>
+  </div>
+  <div class="dossier">
+    <div class="card">
+      <h3>Comment l'agent construit le dossier</h3>
+      <div class="steps">
+        <div class="step"><div><b>Reformuler l'idée en concepts</b><span>abradable, labyrinthe, zones de moindre résistance, grippage après arrêt, positions axiales des léchettes</span></div></div>
+        <div class="step"><div><b>Chercher par classes et par mots</b><span>F01D 11/12, F01D 11/122, F16J 15/445 ; « abradable » et « labyrinth » dans titre, abrégé, revendications ; trois langues</span></div></div>
+        <div class="step"><div><b>Remonter les citations</b><span>documents cités et citant pour les cinq résultats les plus proches, deux niveaux</span></div></div>
+        <div class="step"><div><b>Classer par proximité</b><span>X (seul, détruit la nouveauté), Y (en combinaison), A (contexte), selon la grille de l'examinateur</span></div></div>
+        <div class="step"><div><b>Rédiger la note</b><span>état de l'art, différences de l'idée, revendications à éviter, questions pour la PI</span></div></div>
+      </div>
+    </div>
+    <div class="card tbl">
+      <h3>Extrait du dossier produit</h3>
+      <table>
+        <thead><tr><th>Cat.</th><th>Document</th><th>Déposant, date</th><th>Pourquoi il compte</th></tr></thead>
+        <tbody>
+          <tr><td><b style="color:var(--high)">X</b></td><td>FR 3073890 B1, Joint labyrinthe abradable, notamment pour turbine d'aéronef</td><td>Safran Aircraft Engines, délivré 22 janv. 2021</td><td>Revendique déjà des zones d'usure facilitée aux positions axiales où les léchettes pourraient gripper le rotor après un arrêt bref, par fragilisation locale ou densité moindre. C'est notre propre brevet : l'idée doit s'en distinguer.</td></tr>
+          <tr><td><b style="color:var(--mid)">Y</b></td><td>FR 3136504 B1, Élément abradable comprenant des cellules à inclinaisons différentes</td><td>Safran Aircraft Engines, délivré 10 oct. 2025</td><td>Structure cellulaire à inclinaisons variables : combinable avec des zones de fragilité localisées.</td></tr>
+          <tr><td><b style="color:var(--mid)">Y</b></td><td>FR 3125316 A1, Élément abradable comprenant un indicateur d'usure</td><td>Safran Aircraft Engines, publié 20 janv. 2023</td><td>Indicateur d'usure intégré à l'abradable, pertinent si l'idée inclut un suivi de l'usure des zones fragiles.</td></tr>
+          <tr><td><b style="color:var(--low)">A</b></td><td>US 12459196 B2, Patterned filament for fused filament fabrication</td><td>Rolls-Royce Corp., délivré 4 nov. 2025</td><td>Cite FR 3073890 ; fabrication additive de structures à motifs, contexte pour une variante fabriquée par dépôt de filament.</td></tr>
+          <tr><td><b style="color:var(--low)">A</b></td><td>EP 4350125 A3, Non-contact seal assembly for a gas turbine engine</td><td>RTX, publié 26 juin 2024</td><td>Joint sans contact entre structure stator et disque rotor, contexte des alternatives au labyrinthe.</td></tr>
+          <tr><td><b style="color:var(--low)">A</b></td><td>CN 113187561 B, Labyrinth, partition plate and perforation sealing structure</td><td>Harbin Institute of Technology, 16 août 2024</td><td>Variante universitaire citant FR 3073890, utile pour la couverture internationale.</td></tr>
+        </tbody>
+      </table>
+      <p class="note">Catégories au sens des rapports de recherche EPO. La note complète (4 pages) part au service PI avec les liens vers chaque document et les passages cités.</p>
+    </div>
+  </div>
+</section>
+
+<div class="foot">
+  <div class="card"><h3>Ce que fait l'agent</h3><p>Requêtes hebdomadaires sur l'API Espacenet (OPS) et, en option, sur l'abonnement Orbit : <strong>classes CPC et déposants suivis</strong>, puis lecture des abrégés et de la revendication 1 par un modèle de langage, classement par pertinence selon les règles de l'équipe, message Teams. Rien n'est inventé : chaque phrase renvoie au document.</p></div>
+  <div class="card"><h3>Ce qu'un ingénieur y gagne</h3><p>Une veille qui tourne même les semaines chargées, <strong>cinq lignes par brevet</strong> au lieu de vingt pages, et la question « est-ce que ça nous concerne ? » posée en langage courant. La PI reçoit des dossiers déjà structurés.</p></div>
+  <div class="card"><h3>Comment on le branche chez vous</h3><p><strong>Phase 1</strong> (six semaines) : données publiques uniquement, aucune donnée Safran ne sort, agent Copilot Studio ou script interne. <strong>Phase 2</strong> : croisement avec vos REX et vos dépôts en cours, dans le tenant Microsoft 365.</p></div>
+</div>
+<p class="src">Sources : Google Patents, EPO Global Patent Index et serveur de publication EPO, Official Gazette USPTO ; publications consultées le 1er novembre 2026. Les résumés et classements sont ceux du prototype et n'engagent pas un avis de propriété intellectuelle.</p>
+</div>
+
+<script>
+const P = [
+ {id:'EP3293360B1', lvl:'haute', theme:'Enceinte palier, brosse + labyrinthe', t:'Seal system with primary and secondary seal arrangement', who:'United Technologies Corp. (RTX)', date:'Délivré le 29 oct. 2025', prio:'13 sept. 2016', cpc:['F01D 11/00','F16J 15/3288','F16J 15/447','F01D 11/02'],
+  why:'Même principe que notre US 9879607 B2 (brosse + labyrinthe en série sur une enceinte). Délivrance récente d\'un concurrent direct sur un sujet où nous avons une antériorité.',
+  sum:['Système d\'étanchéité d\'enceinte de palier : une cartouche, une piste, deux joints entre les deux.','Joint primaire à brosse côté air haute pression, joint secondaire labyrinthe ou joint à vis côté enceinte.','Problème visé : usure des joints carbone (conicité, dispersion de montage) et fuites d\'huile vers compresseur ou turbine.','Revendication 1 très large ; les limitations sont dans les revendications dépendantes.','Action : analyse détaillée (onglet 2) et transmission à la PI.'],
+  link:'https://data.epo.org/gpi/EP3293360B1'},
+ {id:'US12203382B1', lvl:'moyenne', theme:'Roulements, lubrification', t:'Bearing oil distribution scheme', who:'Déposant à confirmer à la lecture (document USPTO)', date:'Délivré le 21 janv. 2025', prio:'non relevée', cpc:['F16C 33/66 (probable)'],
+  why:'Distribution d\'huile dans un palier de turbomachine : touche directement nos travaux sur la lubrification des roulements. Fiche à compléter : l\'agent n\'a pas pu lire le texte intégral dans la démo.',
+  sum:['Schéma de distribution d\'huile pour un palier (titre et date confirmés).','Remonté par proximité avec notre US 9879607 B2 dans l\'index des documents similaires.','À lire en priorité par un ingénieur roulements cette semaine.','Dans la version connectée, l\'abrégé et la revendication 1 sont lus automatiquement.'],
+  link:'https://patents.google.com/patent/US12203382'},
+ {id:'EP4350125A3', lvl:'moyenne', theme:'Joints sans contact', t:'Non-contact seal assembly for a gas turbine engine', who:'RTX Corporation', date:'Publié le 26 juin 2024 (divisionnaire)', prio:'19 août 2015', cpc:['F16J 15/442','F01D 11/001','F01D 11/025','F01D 5/082'],
+  why:'Joint sans contact entre structure stator fixe et disque rotor, alternative aux labyrinthes sur nos étages de turbine. Divisionnaire d\'une famille de 2015 : RTX continue d\'investir le sujet.',
+  sum:['Ensemble à rotor aubagé, aubage stator et structure stator fixe, avec un joint sans contact dans l\'espace stator / disque.','Famille : EP 3133241, US 10094241, US 10669888.','Rapport de recherche : douze documents cités dont US 8172232 (joint sans contact) en catégorie Y.','Pour information : à suivre si une revendication est délivrée sur la géométrie du joint.'],
+  link:'https://data.epo.org/gpi/EP4350125A3'},
+ {id:'US12459196B2', lvl:'faible', theme:'Abradables, fabrication additive', t:'Patterned filament for fused filament fabrication', who:'Rolls-Royce Corporation', date:'Délivré le 4 nov. 2025', prio:'non relevée', cpc:['à relever'],
+  why:'Cite notre brevet FR 3073890 sur les labyrinthes abradables. Le lien avec l\'étanchéité passe par la fabrication de structures à motifs ; pertinence faible sauf pour l\'équipe matériaux.',
+  sum:['Filament à motifs pour fabrication par dépôt de fil fondu.','Repéré parce qu\'il cite FR 3073890 B1 (Safran, labyrinthe abradable).','Transmis pour information à l\'équipe abradables.'],
+  link:'https://patents.google.com/patent/US12459196B2/en'},
+ {id:'FR3163395A1', lvl:'interne', theme:'Portefeuille Safran', t:'Dispositif d\'étanchéité pour turbomachine', who:'Safran Aircraft Engines', date:'Publié le 19 déc. 2025', prio:'non relevée', cpc:['à relever'],
+  why:'Notre propre demande, publiée depuis la dernière veille. Cite FR 3073890 (labyrinthe abradable). Pour mémoire : vérifier que les équipes concernées en ont connaissance.',
+  sum:['Demande Safran Aircraft Engines publiée en décembre 2025.','Rattachée à la famille des étanchéités abradables.','Aucune action, sauf partage avec l\'équipe turbine.'],
+  link:'https://patents.google.com/patent/FR3163395A1/en'},
+ {id:'FR3136504B1', lvl:'interne', theme:'Portefeuille Safran', t:'Élément abradable pour turbine de turbomachine, comprenant des cellules à inclinaisons différentes', who:'Safran Aircraft Engines', date:'Délivré le 10 oct. 2025', prio:'non relevée', cpc:['F01D 11/12 (probable)'],
+  why:'Délivrance d\'un brevet Safran sur les abradables cellulaires. Pour mémoire.',
+  sum:['Élément abradable à cellules d\'inclinaisons différentes.','Délivré en octobre 2025.','Entre dans le dossier d\'antériorité de l\'onglet 3.'],
+  link:'https://patents.google.com/patent/FR3136504B1/en'},
+ {id:'WO2024194567A1', lvl:'interne', theme:'Portefeuille Safran', t:'Ensemble d\'étanchéité pour turbomachine', who:'Safran Aircraft Engines', date:'Publié le 26 sept. 2024', prio:'23 mars 2023', cpc:['F01D 11/025','F16J 15/441','F05D 2240/12'],
+  why:'Notre demande PCT : joint à jeu prédéfini avec le rotor, précédé d\'un redresseur d\'air à aubes radiales. Statut signalé « ceased » par Google Patents : à vérifier auprès de la PI.',
+  sum:['Joint maintenant un jeu prédéfini avec la surface externe du rotor.','Organe de redressement d\'air à au moins une rangée d\'aubes radiales, en amont du joint.','Inventeurs : Lemonnier, Boisnault, Garin, Bonneau, Gaudry, Lesaine.','Point d\'attention : statut de la demande à confirmer.'],
+  link:'https://patents.google.com/patent/WO2024194567A1/fr'},
+ {id:'US12000298B2', lvl:'interne', theme:'Portefeuille Safran', t:'Device for pressurizing turbomachine downstream enclosure, and corresponding turbomachine', who:'Safran Aircraft Engines', date:'Délivré le 4 juin 2024', prio:'non relevée', cpc:['F01D 25/18 (probable)'],
+  why:'Délivrance US d\'un brevet Safran sur la pressurisation d\'enceinte aval. Pour mémoire.',
+  sum:['Dispositif de pressurisation d\'une enceinte aval de turbomachine.','Délivré aux États-Unis en juin 2024.','Aucune action.'],
+  link:'https://patents.google.com/patent/US12000298B2/en'}
+];
+const LVL = {haute:'Pertinence haute', moyenne:'Pertinence moyenne', faible:'Pertinence faible', interne:'Portefeuille Safran'};
+const items = document.getElementById('items'), read = document.getElementById('read');
+P.forEach((p,i)=>{
+  const li=document.createElement('li'); li.className='item'; li.tabIndex=0; li.setAttribute('role','button'); li.dataset.i=i;
+  li.innerHTML=`<span class="lvl" data-l="${p.lvl}"></span><div><div class="t">${p.t}</div><div class="m">${p.id}, ${p.date}</div><div class="s">${p.who}</div></div>`;
+  li.addEventListener('click',()=>show(i)); li.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); show(i);} });
+  items.appendChild(li);
+});
+function show(i){
+  const p=P[i];
+  [...items.children].forEach((li,k)=>li.setAttribute('aria-current', k===i ? 'true':'false'));
+  read.innerHTML = `
+    <div class="num">${p.id}</div>
+    <h2>${p.t}</h2>
+    <div class="meta"><div><b>Déposant</b>${p.who}</div><div><b>Date</b>${p.date}</div><div><b>Priorité</b>${p.prio}</div><div><b>Thème</b>${p.theme}</div></div>
+    <div class="pills">${p.cpc.map(c=>`<span class="pill">${c}</span>`).join('')}<span class="pill" style="border-color:var(--${p.lvl==='interne'?'own':p.lvl==='haute'?'high':p.lvl==='moyenne'?'mid':'low'})">${LVL[p.lvl]}</span></div>
+    <div class="why"><b>Pourquoi l'agent le retient</b><span>${p.why}</span></div>
+    <div class="sum"><b style="font-size:.78rem;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:500">Résumé en cinq lignes</b><ol>${p.sum.map(s=>`<li>${s}</li>`).join('')}</ol></div>
+    <div class="actions"><a class="primary" href="${p.link}" target="_blank" rel="noopener">Ouvrir le document</a><button type="button" data-go="v2">Analyser face à notre brevet</button><button type="button" data-go="v3">Ajouter au dossier d'antériorité</button></div>
+    <p class="note">Le résumé est produit à partir de l'abrégé, de la revendication 1 et des citations ; les champs « à relever » sont ceux que la démo n'a pas pu lire.</p>`;
+  read.querySelectorAll('[data-go]').forEach(b=>b.addEventListener('click',()=>go(b.dataset.go)));
+}
+function go(v){
+  document.querySelectorAll('.tabs [role=tab]').forEach(b=>b.setAttribute('aria-selected', b.dataset.v===v ? 'true':'false'));
+  document.querySelectorAll('.view').forEach(s=>s.hidden = s.id!==v);
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+document.querySelectorAll('.tabs [role=tab]').forEach(b=>b.addEventListener('click',()=>go(b.dataset.v)));
+show(0);
+</script>
+
+</body>
+</html>
